@@ -5,55 +5,100 @@
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-user-circle fa-3x text-primary mb-3"></i>
-                        <h3 class="fw-bold">Welcome Back</h3>
-                        <p class="text-muted">Sign in to your account</p>
+        <div class="col-lg-10">
+            <div class="card shadow border-0 overflow-hidden">
+                <div class="row g-0">
+                    <!-- Brand / Illustration -->
+                    <div class="col-md-6 d-none d-md-block bg-light position-relative">
+                        <div class="h-100 d-flex flex-column p-4">
+                            <!-- <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="MSR Shop" style="height:30px"> -->
+                            <div class="mt-4">
+                                <h4 class="fw-bold mb-2">Welcome to MSR Shop</h4>
+                                <p class="text-muted mb-3">Shop smarter with fast checkout, order tracking, and wishlists.</p>
+                            </div>
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center my-3">
+                                <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="MSR Shop Large Logo" style="max-height: 340px; width: 100%; object-fit: contain;">
+                            </div>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Secure authentication</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>One account for all devices</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>24x7 support</li>
+                            </ul>
+                        </div>
                     </div>
-                    
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email Address</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                <input type="email" class="form-control" id="email" name="email" required>
+
+                    <!-- Form -->
+                    <div class="col-md-6">
+                        <div class="p-4 p-md-5">
+                            <div class="text-center mb-4">
+                                <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width:64px;height:64px;">
+                                    <i class="bi bi-person text-primary"></i>
+                                </div>
+                                <h3 class="fw-bold mt-3">Sign in</h3>
+                                <p class="text-muted">Access your account to continue</p>
+                            </div>
+
+                            <form method="POST">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group" id="password_group">
+                                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Your password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="toggle_password"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="1" id="remember">
+                                        <label class="form-check-label" for="remember">Remember me</label>
+                                    </div>
+                                    <a class="small text-decoration-none" href="#">Forgot password?</a>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 py-2">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                                </button>
+                            </form>
+
+                            <div class="text-center mt-4">
+                                <span class="text-muted">Don't have an account?</span>
+                                <a href="{{ url_for('auth.register') }}" class="text-primary text-decoration-none fw-semibold">Create Account</a>
+                            </div>
+
+                            
+                            <div class="mt-4">
+                                <h6 class="fw-semibold">Why MSR Shop?</h6>
+                                <ul class="list-unstyled small text-muted mb-0">
+                                    <li class="mb-1"><i class="bi bi-shield-check text-success me-2"></i>Buyer protection and secure payments</li>
+                                    <li class="mb-1"><i class="bi bi-truck text-success me-2"></i>Fast delivery with real-time tracking</li>
+                                    <li class="mb-1"><i class="bi bi-arrow-repeat text-success me-2"></i>Easy returns and refunds</li>
+                                </ul>
                             </div>
                         </div>
-                        
-                        <div class="mb-4">
-                            <label for="password" class="form-label">Password</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100 py-2">
-                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                        </button>
-                    </form>
-                    
-                    <div class="text-center mt-4">
-                        <p class="text-muted mb-0">Don't have an account?</p>
-                        <a href="{{ url_for('auth.register') }}" class="text-primary text-decoration-none fw-bold">Create Account</a>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Demo Credentials -->
-            <div class="card mt-3 bg-light border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Demo Credentials:</h6>
-                    <small class="text-muted">
-                        <strong>Admin:</strong> admin@msrshop.com / admin123<br>
-                        <strong>Customer:</strong> Register as a new customer
-                    </small>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+// Show/hide password toggle
+document.getElementById('toggle_password')?.addEventListener('click', function() {
+    const input = document.getElementById('password');
+    if (!input) return;
+    const isPwd = input.getAttribute('type') === 'password';
+    input.setAttribute('type', isPwd ? 'text' : 'password');
+    this.querySelector('i')?.classList.toggle('fa-eye');
+    this.querySelector('i')?.classList.toggle('fa-eye-slash');
+});
+</script>
 {% endblock %}

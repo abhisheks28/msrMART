@@ -5,20 +5,41 @@
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
-                        <h3 class="fw-bold">Create Account</h3>
-                        <p class="text-muted">Join MSR Shop today</p>
+        <div class="col-lg-10">
+            <div class="card shadow border-0 overflow-hidden">
+                <div class="row g-0">
+                    <div class="col-md-6 d-none d-md-block bg-light position-relative">
+                        <div class="h-100 d-flex flex-column p-4">
+                            <div class="mt-4">
+                                <h4 class="fw-bold mb-2">Join MSR Shop</h4>
+                                <p class="text-muted mb-3">Create your account and start shopping smarter.</p>
+                            </div>
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center my-3">
+                                <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="MSR Shop Large Logo" style="max-height: 340px; width: 100%; object-fit: contain;">
+                            </div>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Exclusive deals & wishlist</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Order tracking and fast checkout</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Secure payments</li>
+                            </ul>
+                        </div>
                     </div>
                     
-                    <form method="POST">
+                    <div class="col-md-6">
+                        <div class="p-4 p-md-5">
+                            <div class="text-center mb-4">
+                                <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width:64px;height:64px;">
+                                    <i class="bi bi-person-plus text-primary"></i>
+                                </div>
+                                <h3 class="fw-bold mt-3">Create Account</h3>
+                                <p class="text-muted">Join MSR Shop today</p>
+                            </div>
+                            
+                            <form method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Full Name</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
                         </div>
@@ -26,7 +47,7 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                         </div>
@@ -34,7 +55,7 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" class="form-control" id="password" name="password" required minlength="6">
                             </div>
                             <small class="text-muted">Minimum 6 characters</small>
@@ -43,7 +64,7 @@
                         <div class="mb-3">
                             <label for="confirm_password" class="form-label">Confirm Password</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                             </div>
                         </div>
@@ -51,20 +72,22 @@
                         <div class="mb-4">
                             <label for="unique_code" class="form-label">Super Admin Code (Optional)</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <span class="input-group-text"><i class="bi bi-key"></i></span>
                                 <input type="text" class="form-control" id="unique_code" name="unique_code" placeholder="Leave empty for customer account">
                             </div>
                             <small class="text-muted">Enter the unique code provided by admin to register as a Super Admin</small>
                         </div>
                         
                         <button type="submit" class="btn btn-primary w-100 py-2">
-                            <i class="fas fa-user-plus me-2"></i>Create Account
+                            <i class="bi bi-person-check me-2"></i>Create Account
                         </button>
-                    </form>
-                    
-                    <div class="text-center mt-4">
-                        <p class="text-muted mb-0">Already have an account?</p>
-                        <a href="{{ url_for('auth.login') }}" class="text-primary text-decoration-none fw-bold">Sign In</a>
+                            </form>
+                            
+                            <div class="text-center mt-4">
+                                <span class="text-muted">Already have an account?</span>
+                                <a href="{{ url_for('auth.login') }}" class="text-primary text-decoration-none fw-semibold">Sign In</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

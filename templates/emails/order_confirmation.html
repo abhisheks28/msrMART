@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .header { background-color: #4CAF50; color: #ffffff; padding: 10px 20px; text-align: center; border-radius: 8px 8px 0 0; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { padding: 20px; color: #333333; line-height: 1.6; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #aaaaaa; }
+        .button { display: inline-block; background-color: #4CAF50; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 15px; }
+        .order-details { margin-top: 20px; border-top: 1px solid #eeeeee; padding-top: 20px; }
+        .order-details p { margin: 5px 0; }
+        .order-items { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .order-items th, .order-items td { border: 1px solid #eeeeee; padding: 8px; text-align: left; }
+        .order-items th { background-color: #f2f2f2; }
+        .total { text-align: right; padding-top: 10px; font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Order Confirmation</h1>
+        </div>
+        <div class="content">
+            <p>Hello {{ customer_name }},</p>
+            <p>Thank you for your order! We're excited to let you know that your order has been successfully placed and is being prepared for shipment.</p>
+            
+            <div class="order-details">
+                <p><strong>Order ID:</strong> #{{ order_id }}</p>
+                <p><strong>Order Date:</strong> {{ order_date }}</p>
+                <p><strong>Payment Method:</strong> {{ payment_method }}</p>
+                <p><strong>Shipping Address:</strong> {{ shipping_address }}</p>
+                <p><strong>Expected Delivery:</strong> {{ expected_delivery_date }}</p>
+            </div>
+
+            <h2>Order Summary</h2>
+            <table class="order-items">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                    <tr>
+                        <td>{{ item.product_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ "%.2f"|format(item.price|float) }}</td>
+                        <td>${{ "%.2f"|format((item.quantity * item.price)|float) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p class="total">Total: ${{ "%.2f"|format(total_amount|float) }}</p>
+            
+            <p>You can view your order status by logging into your account on our website.</p>
+            <p>If you have any questions, please don't hesitate to contact our support team.</p>
+            <p>Thanks again for your purchase!</p>
+        </div>
+        <div class="footer">
+            <p>&copy; {{ current_year }} MSR Shop. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Revenue - Admin - MSR Shop{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 text-dark">Revenue Overview</h2>
+        <div class="d-flex align-items-center gap-3">
+            <h4 class="mb-0 text-primary">Total Revenue: ₹{{ "%.2f"|format(total_revenue) }}</h4>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="revenueSortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    View by: {{ time_period.replace('_', ' ').title() if time_period else 'Month' }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="revenueSortDropdown">
+                    <li><a class="dropdown-item {% if time_period == 'week' %}active{% endif %}" href="{{ url_for('main.admin_revenue', time_period='week') }}">Last Week</a></li>
+                    <li><a class="dropdown-item {% if time_period == 'month' or not time_period %}active{% endif %}" href="{{ url_for('main.admin_revenue', time_period='month') }}">Last Month</a></li>
+                    <li><a class="dropdown-item {% if time_period == 'year' %}active{% endif %}" href="{{ url_for('main.admin_revenue', time_period='year') }}">Last Year</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download CSV Section -->
+    <div class="card border-0 shadow-sm transition-3d-hover mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 text-secondary">Export Revenue Data (CSV)</h5>
+            <a href="{{ url_for('main.download_revenue_csv', time_period=time_period) }}" class="btn btn-primary">
+                <i class="fas fa-download me-1"></i> Download CSV
+            </a>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-0">Click the button above to download the currently displayed revenue data as a CSV file.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm transition-3d-hover mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 text-secondary">Revenue Data</h5>
+        </div>
+        <div class="card-body">
+            {% if revenue_data %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-secondary">Period</th>
+                                <th class="text-secondary">Revenue (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in revenue_data %}
+                            <tr>
+                                <td><span class="fw-semibold text-dark">{{ item.period }}</span></td>
+                                <td><span class="fw-bold text-success">₹{{ "%.2f"|format(item.revenue) }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No revenue data available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

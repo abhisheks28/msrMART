@@ -1,18 +1,19 @@
 from datetime import datetime, timedelta
+import uuid
 from app import db
 from flask_login import UserMixin
 from sqlalchemy import func, Table, Column, Integer, ForeignKey
 
 # Association table for Super Admins and Categories
 super_admin_categories = db.Table('super_admin_categories',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('user_id', db.String(36), db.ForeignKey('users.id'), primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
 )
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4())) # Generate UUID for primary key
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
@@ -27,6 +28,7 @@ class User(UserMixin, db.Model):
     cart_items = db.relationship('Cart', backref='user', lazy=True)
     wishlist_items = db.relationship('Wishlist', backref='user', lazy=True)
     categories = db.relationship('Category', secondary=super_admin_categories, backref='super_admins', lazy='dynamic')
+    addresses = db.relationship('Address', backref='user', lazy=True, cascade='all, delete-orphan')
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -49,7 +51,7 @@ class Product(db.Model):
     original_price = db.Column(db.Numeric(10, 2), nullable=True) # For discount pricing
     stock = db.Column(db.Integer, nullable=False, default=0)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
-    super_admin_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    super_admin_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False) # Changed to String to store UUID
     image_url = db.Column(db.String(200), default=None) # Primary image
     brand = db.Column(db.String(100), nullable=True)
     dimensions = db.Column(db.String(200), nullable=True) # e.g., "Large: 35.5x25.4x3.8 cm, Medium: ..."
@@ -61,9 +63,9 @@ class Product(db.Model):
     
     # Relationships
     product_images = db.relationship('ProductImage', backref='product', lazy=True, cascade='all, delete-orphan')
-    order_items = db.relationship('OrderItem', backref='product', lazy=True)
-    cart_items = db.relationship('Cart', backref='product', lazy=True)
-    wishlist_items = db.relationship('Wishlist', backref='product', lazy=True)
+    order_items = db.relationship('OrderItem', backref='product', lazy=True, cascade='all, delete-orphan')
+    cart_items = db.relationship('Cart', backref='product', lazy=True, cascade='all, delete-orphan')
+    wishlist_items = db.relationship('Wishlist', backref='product', lazy=True, cascade='all, delete-orphan')
 
 class ProductImage(db.Model):
     __tablename__ = 'product_images'
@@ -78,7 +80,7 @@ class Order(db.Model):
     __tablename__ = 'orders'
     
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    customer_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False) # Changed to String to store UUID
     total_amount = db.Column(db.Numeric(10, 2), nullable=False)
     status = db.Column(db.String(50), nullable=False, default='pending')  # pending, processing, shipped, delivered, cancelled
     payment_method = db.Column(db.String(50), nullable=False)  # cod, online
@@ -136,7 +138,7 @@ class Cart(db.Model):
     __tablename__ = 'cart'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False) # Changed to String to store UUID
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -145,7 +147,7 @@ class Wishlist(db.Model):
     __tablename__ = 'wishlist'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False) # Changed to String to store UUID
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -158,4 +160,20 @@ class Payment(db.Model):
     transaction_id = db.Column(db.String(100))
     payment_status = db.Column(db.String(50), nullable=False, default='pending')
     amount = db.Column(db.Numeric(10, 2), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Address(db.Model):
+    __tablename__ = 'addresses'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    label = db.Column(db.String(20), nullable=False, default='Home') # Home, Work, Other
+    full_name = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    address_line = db.Column(db.Text, nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    state = db.Column(db.String(100), nullable=False)
+    zip_code = db.Column(db.String(20), nullable=False)
+    is_default = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

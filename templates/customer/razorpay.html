@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Razorpay - Payment{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-credit-card me-2"></i>
+            <strong>Razorpay</strong>
+          </div>
+          <div class="small">Order total: <span class="fw-bold">₹{{ '%.2f'|format(total) }}</span></div>
+        </div>
+        <div class="card-body">
+          <div class="row g-4">
+            <!-- Left: Order/merchant summary -->
+            <div class="col-lg-3">
+              <div class="border rounded p-3 mb-3">
+                <div class="d-flex align-items-center mb-2">
+                  <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Brand" style="height:22px" class="me-2">
+                  <span class="text-muted small">Razorpay Trusted Business</span>
+                </div>
+                <div class="fw-semibold mb-2">Order Summary</div>
+                <div class="d-flex justify-content-between small"><span>Items</span><span>1</span></div>
+                <div class="d-flex justify-content-between small"><span>Subtotal</span><span>₹{{ '%.2f'|format(total) }}</span></div>
+                <div class="d-flex justify-content-between small"><span>Shipping</span><span class="text-success">Free</span></div>
+                <hr>
+                <div class="d-flex justify-content-between"><span class="fw-semibold">Total</span><span class="fw-bold text-primary">₹{{ '%.2f'|format(total) }}</span></div>
+              </div>
+              <div class="border rounded p-3 mb-3">
+                <div class="fw-semibold mb-1">Coupons and offers</div>
+                <div class="small text-muted">No coupons applied</div>
+              </div>
+              <div class="border rounded p-3">
+                <div class="small text-muted">Logged in as</div>
+                <div class="fw-semibold">{{ current_user.name }}</div>
+              </div>
+            </div>
+
+            <!-- Middle: Payment options + content -->
+            <div class="col-lg-6">
+              <div class="row g-3">
+                <div class="col-md-5">
+                  <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action active" id="opt_upi">UPI</button>
+                    <button type="button" class="list-group-item list-group-item-action" id="opt_cards">Cards</button>
+                    <button type="button" class="list-group-item list-group-item-action" disabled>Netbanking</button>
+                    <button type="button" class="list-group-item list-group-item-action" disabled>EMI</button>
+                    <button type="button" class="list-group-item list-group-item-action" disabled>Wallets</button>
+                    <button type="button" class="list-group-item list-group-item-action" disabled>Pay later</button>
+                    <button type="button" class="list-group-item list-group-item-action" disabled>Cash on Delivery</button>
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <div id="pane_upi">
+                    <div class="fw-semibold mb-2">Scan to Pay</div>
+                    <div class="border rounded p-3 bg-white d-inline-block mb-2">
+                      <img id="qr_img" alt="QR Code" width="200" height="200">
+                    </div>
+                    <div class="small text-muted mb-3">Use any UPI app on your phone</div>
+                    <form method="POST" action="{{ url_for('main.place_order') }}">
+                      {% for k, v in original_fields.items() %}
+                        <input type="hidden" name="{{ k }}" value="{{ v }}">
+                      {% endfor %}
+                      <input type="hidden" name="payment_method" value="online">
+                      <button type="submit" class="btn btn-success w-100">I've Paid – Place Order</button>
+                    </form>
+                  </div>
+
+                  <div id="pane_cards" style="display:none;">
+                    <div class="fw-semibold mb-2">Pay with card</div>
+                    <div class="mb-3">
+                      <label class="form-label">Card Number</label>
+                      <input type="text" class="form-control" value="4111 1111 1111 1111">
+                    </div>
+                    <div class="row">
+                      <div class="col-6 mb-3">
+                        <label class="form-label">Expiry</label>
+                        <input type="text" class="form-control" value="12/28">
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label class="form-label">CVV</label>
+                        <input type="text" class="form-control" value="123">
+                      </div>
+                    </div>
+                    <form method="POST" action="{{ url_for('main.place_order') }}">
+                      {% for k, v in original_fields.items() %}
+                        <input type="hidden" name="{{ k }}" value="{{ v }}">
+                      {% endfor %}
+                      <input type="hidden" name="payment_method" value="online">
+                      <button type="submit" class="btn btn-success w-100">Pay Now and Place Order</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Contact mock -->
+            <div class="col-lg-3">
+              <div class="border rounded p-3">
+                <div class="small text-muted">Total Amount</div>
+                <div class="h4">₹{{ '%.0f'|format(total) }}</div>
+                <div class="mt-3">
+                  <label class="form-label small">Mobile number</label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">+91</span>
+                    <input type="text" class="form-control" placeholder="Mobile number">
+                  </div>
+                </div>
+                <button class="btn btn-dark w-100 btn-sm mt-3" disabled>Continue</button>
+                <div class="small text-muted mt-2">Secured by Razorpay</div>
+              </div>
+            </div>
+          </div>
+
+          <a href="{{ url_for('main.checkout') }}" class="btn btn-link w-100 mt-3">Cancel and go back</a>
+          <small class="text-muted d-block mt-1">This is a simulated payment page for development only.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<span id="order_amount" data-amount="{{ '%.2f'|format(total) }}" style="display:none"></span>
+
+<script>
+// Generate a simple QR code via a public QR service (for demo only)
+(function(){
+  const amount = document.getElementById('order_amount').dataset.amount;
+  const payload = `upi://pay?pa=dummy@upi&pn=MSR%20Shop&am=${amount}&cu=INR&tn=Order%20Payment`;
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(payload);
+  const img = document.getElementById('qr_img');
+  if (img) img.src = qrUrl;
+  // Toggle list-group panes
+  const upiBtn = document.getElementById('opt_upi');
+  const cardBtn = document.getElementById('opt_cards');
+  const upiPane = document.getElementById('pane_upi');
+  const cardPane = document.getElementById('pane_cards');
+  function activate(which){
+    if (which === 'upi') { upiPane.style.display='block'; cardPane.style.display='none'; upiBtn.classList.add('active'); cardBtn.classList.remove('active'); }
+    else { upiPane.style.display='none'; cardPane.style.display='block'; cardBtn.classList.add('active'); upiBtn.classList.remove('active'); }
+  }
+  if (upiBtn && cardBtn) {
+    upiBtn.addEventListener('click', ()=>activate('upi'));
+    cardBtn.addEventListener('click', ()=>activate('card'));
+  }
+})();
+</script>
+{% endblock %}
+
+

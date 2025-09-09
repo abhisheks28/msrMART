@@ -3,24 +3,28 @@
 {% block title %}Products - MSR Shop{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <!-- Category Tags Section -->
-    <div class="row mb-4 justify-content-center">
-        <div class="col-12 d-flex flex-wrap justify-content-center gap-2">
-            <a href="{{ url_for('main.products') }}" 
-               class="btn btn-outline-primary rounded-pill {% if not request.args.get('category') %}active{% endif %}">
-                All Categories
-            </a>
-            {% for category in categories %}
-            <a href="{{ url_for('main.products', category=category.id) }}" 
-               class="btn btn-outline-primary rounded-pill {% if request.args.get('category') == category.id|string %}active{% endif %}">
-                {{ category.name }}
-            </a>
-            {% endfor %}
-        </div>
-    </div>
+<div class="container-fluid py-4">
     
     <!-- Products Grid -->
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-6">
+            <h4 class="mb-0">All Products</h4>
+        </div>
+        <div class="col-md-6 d-flex justify-content-end">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by: {{ request.args.get('sort_by', 'Default')|replace('_', ' ')|title }}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
+                    <li><a class="dropdown-item {% if not request.args.get('sort_by') %}active{% endif %}" href="{{ url_for('main.products', **{'category': request.args.get('category'), 'sort_by': None}) }}">Default</a></li>
+                    <li><a class="dropdown-item {% if request.args.get('sort_by') == 'price_asc' %}active{% endif %}" href="{{ url_for('main.products', **{'category': request.args.get('category'), 'sort_by': 'price_asc'}) }}">Price: Low to High</a></li>
+                    <li><a class="dropdown-item {% if request.args.get('sort_by') == 'price_desc' %}active{% endif %}" href="{{ url_for('main.products', **{'category': request.args.get('category'), 'sort_by': 'price_desc'}) }}">Price: High to Low</a></li>
+                    <li><a class="dropdown-item {% if request.args.get('sort_by') == 'name_asc' %}active{% endif %}" href="{{ url_for('main.products', **{'category': request.args.get('category'), 'sort_by': 'name_asc'}) }}">Name: A-Z</a></li>
+                    <li><a class="dropdown-item {% if request.args.get('sort_by') == 'name_desc' %}active{% endif %}" href="{{ url_for('main.products', **{'category': request.args.get('category'), 'sort_by': 'name_desc'}) }}">Name: Z-A</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
     {% if products %}
         <div class="row">
             {% for product in products %}
@@ -58,11 +62,11 @@
                             <div class="d-flex justify-content-between align-items-center mt-1" style="line-height: 1;">
                                 <div>
                                     {% if product.original_price %}
-                                        <span class="text-muted text-decoration-line-through me-2 small">${{ "%.2f"|format(product.original_price) }}</span>
-                                        <span class="h6 text-primary mb-0">${{ "%.2f"|format(product.price) }}</span>
+                                        <span class="text-muted text-decoration-line-through me-2 small">₹{{ "%.2f"|format(product.original_price) }}</span>
+                                        <span class="h6 text-primary mb-0">₹{{ "%.2f"|format(product.price) }}</span>
                                         <span class="text-danger ms-1 small">-{{ "%.0f"|format(((product.original_price - product.price) / product.original_price) * 100) }}%</span>
                                     {% else %}
-                                        <span class="h6 text-primary mb-0">${{ "%.2f"|format(product.price) }}</span>
+                                        <span class="h6 text-primary mb-0">₹{{ "%.2f"|format(product.price) }}</span>
                                     {% endif %}
                                 </div>
                                 <small class="text-muted">{{ product.stock }} in stock</small>

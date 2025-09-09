@@ -7,14 +7,17 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2">
-            <div class="bg-white rounded shadow-sm p-3">
+            <div class="sidebar bg-white rounded shadow-sm p-3">
                 <h6 class="text-muted mb-3">SUPER ADMIN</h6>
                 <nav class="nav flex-column">
                     <a class="nav-link active" href="{{ url_for('main.super_admin_dashboard') }}">
                         <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                     </a>
+                    <a class="nav-link" href="{{ url_for('main.add_product') }}">
+                        <i class="fas fa-plus me-2"></i>Add Product
+                    </a>
                     <a class="nav-link" href="{{ url_for('main.super_admin_products') }}">
-                        <i class="fas fa-box me-2"></i>Products
+                        <i class="fas fa-boxes me-2"></i>Manage Products
                     </a>
                     <a class="nav-link" href="{{ url_for('main.super_admin_orders') }}">
                         <i class="fas fa-shopping-cart me-2"></i>Orders
@@ -26,99 +29,94 @@
         <!-- Main Content -->
         <div class="col-md-9 col-lg-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Super Admin Dashboard</h2>
-                <span class="badge bg-success fs-6">{{ current_user.name }}</span>
+                <h2 class="fw-bold text-primary mb-0">Super Admin Dashboard</h2>
+                <span class="badge bg-success fs-6"><i class="fas fa-user-shield me-2"></i>{{ current_user.name }}</span>
             </div>
             
             <!-- Stats Cards -->
-            <div class="row mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">My Products</h6>
-                                    <h3 class="mb-0">{{ products_count }}</h3>
-                                </div>
-                                <i class="fas fa-box fa-2x opacity-75"></i>
+            <div class="row mb-4 g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="card-title text-muted text-uppercase mb-2">My Products</h6>
+                                <h3 class="display-5 fw-bold text-primary mb-0">{{ products_count }}</h3>
+                            </div>
+                            <div class="icon-lg bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-box fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Orders</h6>
-                                    <h3 class="mb-0">{{ orders_count }}</h3>
-                                </div>
-                                <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="card-title text-muted text-uppercase mb-2">Orders</h6>
+                                <h3 class="display-5 fw-bold text-success mb-0">{{ orders_count }}</h3>
+                            </div>
+                            <div class="icon-lg bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-shopping-cart fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Revenue</h6>
-                                    <h3 class="mb-0">${{ "%.2f"|format(revenue) }}</h3>
-                                </div>
-                                <i class="fas fa-dollar-sign fa-2x opacity-75"></i>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="card-title text-muted text-uppercase mb-2">Revenue</h6>
+                                <h5 class="fw-bold text-info mb-0">₹{{ "%.2f"|format(revenue) }}</h5>
+                            </div>
+                            <div class="icon-lg bg-info-subtle text-info rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-dollar-sign fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-warning text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Low Stock</h6>
-                                    <h3 class="mb-0">{{ low_stock_products|length }}</h3>
-                                </div>
-                                <i class="fas fa-exclamation-triangle fa-2x opacity-75"></i>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="card-title text-muted text-uppercase mb-2">Low Stock</h6>
+                                <h3 class="display-5 fw-bold text-warning mb-0">{{ low_stock_products|length }}</h3>
+                            </div>
+                            <div class="icon-lg bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="row">
+            <div class="row g-4 mb-4">
                 <!-- Low Stock Alerts -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Low Stock Alerts</h5>
+                <div class="col-lg-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-muted">Low Stock Alerts</h5>
+                            <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-sm btn-outline-primary">View All</a>
                         </div>
                         <div class="card-body">
                             {% if low_stock_products %}
-                                <div class="list-group list-group-flush">
+                                <div class="list-group list-group-flush border-top-0">
                                     {% for product in low_stock_products %}
-                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center py-3">
                                         <div>
-                                            <strong>{{ product.name }}</strong>
-                                            <br>
+                                            <h6 class="mb-1">{{ product.name }}</h6>
                                             <small class="text-muted">{{ product.category.name }}</small>
                                         </div>
-                                        <span class="badge bg-warning rounded-pill">{{ product.stock }} left</span>
+                                        <span class="badge bg-warning rounded-pill fs-6">{{ product.stock }} left</span>
                                     </div>
                                     {% endfor %}
                                 </div>
-                                <div class="mt-3">
-                                    <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-primary btn-sm">
-                                        Manage Products
-                                    </a>
-                                </div>
                             {% else %}
-                                <div class="text-center py-3">
-                                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                                    <p class="text-muted">All products are well stocked!</p>
+                                <div class="text-center py-5">
+                                    <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                                    <h5 class="text-muted">All products are well stocked!</h5>
                                 </div>
                             {% endif %}
                         </div>
@@ -126,21 +124,22 @@
                 </div>
                 
                 <!-- Recent Orders -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Recent Orders</h5>
+                <div class="col-lg-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-muted">Recent Orders</h5>
+                            <a href="{{ url_for('main.super_admin_orders') }}" class="btn btn-sm btn-outline-primary">View All</a>
                         </div>
                         <div class="card-body">
                             {% if recent_orders %}
                                 <div class="table-responsive">
-                                    <table class="table table-sm">
+                                    <table class="table table-hover table-sm mb-0">
                                         <thead>
                                             <tr>
-                                                <th>Order #</th>
-                                                <th>Customer</th>
-                                                <th>Amount</th>
-                                                <th>Status</th>
+                                                <th scope="col">Order #</th>
+                                                <th scope="col">Customer</th>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -150,7 +149,7 @@
                                                 <td>{{ order.customer.name }}</td>
                                                 <td>${{ "%.2f"|format(order.total_amount) }}</td>
                                                 <td>
-                                                    <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">
+                                                    <span class="badge rounded-pill bg-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">
                                                         {{ order.status.title() }}
                                                     </span>
                                                 </td>
@@ -159,15 +158,10 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="mt-3">
-                                    <a href="{{ url_for('main.super_admin_orders') }}" class="btn btn-primary btn-sm">
-                                        View All Orders
-                                    </a>
-                                </div>
                             {% else %}
-                                <div class="text-center py-3">
-                                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                                    <p class="text-muted">No orders yet</p>
+                                <div class="text-center py-5">
+                                    <i class="fas fa-shopping-cart fa-4x text-muted mb-3"></i>
+                                    <h5 class="text-muted">No orders yet</h5>
                                 </div>
                             {% endif %}
                         </div>
@@ -175,32 +169,76 @@
                 </div>
             </div>
             
-            <!-- Quick Actions -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Quick Actions</h5>
+            <div class="row g-4 mb-4">
+                <!-- High Demand Products -->
+                <div class="col-lg-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-muted">High Demand Products</h5>
+                            <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-sm btn-outline-primary">View All</a>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3 mb-2">
-                                    <a href="{{ url_for('main.add_product') }}" class="btn btn-primary w-100">
+                            {% if high_demand_products %}
+                                <div class="list-group list-group-flush border-top-0">
+                                    {% for product in high_demand_products %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <div>
+                                            <h6 class="mb-1">{{ product.name }}</h6>
+                                            <small class="text-muted">{{ product.category.name }}</small>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill fs-6">Sold: {{ product.sales_count }}</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <i class="fas fa-fire fa-4x text-muted mb-3"></i>
+                                    <h5 class="text-muted">No high demand products to display.</h5>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Based Graph -->
+                <div class="col-lg-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-muted">Products by Category</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-muted">Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <a href="{{ url_for('main.add_product') }}" class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-3">
                                         <i class="fas fa-plus me-2"></i>Add Product
                                     </a>
                                 </div>
-                                <div class="col-md-3 mb-2">
-                                    <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-outline-primary w-100">
-                                        <i class="fas fa-edit me-2"></i>Manage Products
+                                <div class="col-md-3">
+                                    <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-3">
+                                        <i class="fas fa-boxes me-2"></i>Manage Products
                                     </a>
                                 </div>
-                                <div class="col-md-3 mb-2">
-                                    <a href="{{ url_for('main.super_admin_orders') }}" class="btn btn-outline-primary w-100">
+                                <div class="col-md-3">
+                                    <a href="{{ url_for('main.super_admin_orders') }}" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-3">
                                         <i class="fas fa-truck me-2"></i>Process Orders
                                     </a>
                                 </div>
-                                <div class="col-md-3 mb-2">
-                                    <a href="{{ url_for('main.profile') }}" class="btn btn-outline-primary w-100">
+                                <div class="col-md-3">
+                                    <a href="{{ url_for('main.profile') }}" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-3">
                                         <i class="fas fa-user me-2"></i>Profile Settings
                                     </a>
                                 </div>
@@ -212,4 +250,50 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Chart for Products by Category
+    var categoryLabels = JSON.parse('{{ category_labels | tojson | safe }}');
+    var categoryValues = JSON.parse('{{ category_values | tojson | safe }}');
+
+    var ctx = document.getElementById('categoryChart').getContext('2d');
+    var categoryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                label: 'Number of Products',
+                data: categoryValues,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Products'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Category'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

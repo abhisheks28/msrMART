@@ -21,13 +21,13 @@
                         {% for image in product.product_images %}
                             <div class="carousel-item {% if image.is_primary %}active{% endif %}">
                                 <img src="{{ image.image_url }}" class="d-block w-100 rounded" alt="{{ product.name }}"
-                                     style="height: 400px; object-fit: cover;">
+                                     style="height: 400px; object-fit: contain;">
                             </div>
                         {% endfor %}
                     {% else %}
                         <div class="carousel-item active">
                             <img src="{{ product.image_url }}" class="d-block w-100 rounded" alt="{{ product.name }}"
-                                 style="height: 400px; object-fit: cover;">
+                                 style="height: 400px; object-fit: contain;">
                         </div>
                     {% endif %}
                 </div>
@@ -46,7 +46,7 @@
                 {% if product.product_images %}
                     {% for image in product.product_images %}
                         <img src="{{ image.image_url }}" class="img-thumbnail mx-1 {% if image.is_primary %}border border-primary{% endif %}"
-                             alt="{{ product.name }}" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;"
+                             alt="{{ product.name }}" style="width: 80px; height: 80px; object-fit: contain; cursor: pointer;"
                              onclick="currentSlide({{ loop.index0 }})">
                     {% endfor %}
                 {% endif %}
@@ -79,7 +79,22 @@
                     {% endif %}
 
                     {% if product.description %}
-                        <p class="text-muted">{{ product.description }}</p>
+                        {% if 'Key Features:' in product.description %}
+                            <p class="text-muted">
+                                {{ product.description.split('Key Features:')[0] }}
+                            </p>
+                            <h6 class="mt-3">Key Features:</h6>
+                            <ul class="list-unstyled">
+                                {% set features = product.description.split('Key Features:')[1].split(';') %}
+                                {% for feature in features %}
+                                    {% if feature.strip() %}
+                                        <li><i class="fas fa-check-circle text-success me-2"></i>{{ feature.strip() }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">{{ product.description }}</p>
+                        {% endif %}
                     {% else %}
                         <p class="text-muted">No description available for this product.</p>
                     {% endif %}
@@ -92,11 +107,11 @@
                         <div class="col-6">
                             <h4 class="text-primary">
                                 {% if product.original_price %}
-                                    <span class="text-decoration-line-through text-muted fs-5">${{ "%.2f"|format(product.original_price) }}</span>
-                                    ${{ "%.2f"|format(product.price) }}
+                                    <span class="text-decoration-line-through text-muted fs-5">₹{{ "%.2f"|format(product.original_price) }}</span>
+                                    ₹{{ "%.2f"|format(product.price) }}
                                     <span class="text-danger fs-5 ms-2">-{{ "%.0f"|format(((product.original_price - product.price) / product.original_price) * 100) }}%</span>
                                 {% else %}
-                                    ${{ "%.2f"|format(product.price) }}
+                                    ₹{{ "%.2f"|format(product.price) }}
                                 {% endif %}
                             </h4>
                         </div>

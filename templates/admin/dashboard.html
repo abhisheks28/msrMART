@@ -16,104 +16,98 @@
             </div>
             
             <!-- Stats Cards -->
-            <div class="row mb-4">
+            <div class="row mb-4 g-4">
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Total Orders</h6>
-                                    <h3 class="mb-0">{{ total_orders }}</h3>
-                                </div>
-                                <i class="fas fa-box fa-2x opacity-75"></i>
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover bg-gradient-purple text-white">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title text-uppercase mb-2 text-white-50">Total Orders</h6>
+                                <h3 class="display-5 fw-bold mb-0">{{ total_orders }}</h3>
+                            </div>
+                            <div class="icon-lg bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-box fa-2x text-white"></i>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Total Revenue</h6>
-                                    <h3 class="mb-0">${{ "%.2f"|format(total_revenue) }}</h3>
-                                </div>
-                                <i class="fas fa-dollar-sign fa-2x opacity-75"></i>
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover bg-gradient-green text-white">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title text-uppercase mb-2 text-white-50">Total Revenue</h6>
+                                <h3 class="display-5 fw-bold mb-0">₹{{ "%.2f"|format(total_revenue) }}</h3>
+                            </div>
+                            <div class="icon-lg bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-rupee-sign fa-2x text-white"></i>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Total Users</h6>
-                                    <h3 class="mb-0">{{ total_users }}</h3>
-                                </div>
-                                <i class="fas fa-users fa-2x opacity-75"></i>
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover bg-gradient-blue text-white">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title text-uppercase mb-2 text-white-50">Total Users</h6>
+                                <h3 class="display-5 fw-bold mb-0">{{ total_users }}</h3>
+                            </div>
+                            <div class="icon-lg bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-users fa-2x text-white"></i>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-warning text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Super Admins</h6>
-                                    <h3 class="mb-0">{{ total_super_admins }}</h3>
-                                </div>
-                                <i class="fas fa-user-shield fa-2x opacity-75"></i>
+                    <div class="card h-100 border-0 shadow-sm transition-3d-hover bg-gradient-orange text-white">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title text-uppercase mb-2 text-white-50">Super Admins</h6>
+                                <h3 class="display-5 fw-bold mb-0">{{ total_super_admins }}</h3>
+                            </div>
+                            <div class="icon-lg bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-user-shield fa-2x text-white"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="row">
+            <div class="row g-4 mb-4">
                 <!-- Revenue Chart -->
-                <div class="col-lg-8 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Monthly Revenue</h5>
+                <div class="col-lg-12">
+                    <div class="card border-0 shadow-sm transition-3d-hover">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-secondary">Monthly Revenue</h5>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Time period selection">
+                                <a href="{{ url_for('main.admin_dashboard', time_period='week') }}" class="btn {% if time_period == 'week' %}btn-primary{% else %}btn-outline-primary{% endif %}">Last Week</a>
+                                <a href="{{ url_for('main.admin_dashboard', time_period='month') }}" class="btn {% if time_period == 'month' or not time_period %}btn-primary{% else %}btn-outline-primary{% endif %}">Last Month</a>
+                                <a href="{{ url_for('main.admin_dashboard', time_period='year') }}" class="btn {% if time_period == 'year' %}btn-primary{% else %}btn-outline-primary{% endif %}">Last Year</a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <canvas id="revenueChart" height="300"></canvas>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Order Status Breakdown -->
-                <div class="col-lg-4 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Order Status</h5>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="statusChart"></canvas>
-                        </div>
-                    </div>
-                </div>
             </div>
             
-            <div class="row">
+            <div class="row g-4">
                 <!-- Top Products -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Top Selling Products</h5>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm transition-3d-hover">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-secondary">Top Selling Products</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
                         </div>
                         <div class="card-body">
                             {% if top_products %}
                                 <div class="list-group list-group-flush">
-                                    {% for product_name, total_sold in top_products %}
-                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>{{ product_name }}</span>
-                                        <span class="badge bg-primary rounded-pill">{{ total_sold }} sold</span>
+                                    {% for product in top_products %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <span class="fw-semibold text-dark">{{ product.name }}</span>
+                                        <span class="badge bg-primary-subtle text-primary rounded-pill">{{ product.total_sold }} sold</span>
                                     </div>
                                     {% endfor %}
                                 </div>
@@ -125,31 +119,32 @@
                 </div>
                 
                 <!-- Recent Orders -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Recent Orders</h5>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm transition-3d-hover">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-secondary">Recent Orders</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
                         </div>
                         <div class="card-body">
                             {% if recent_orders %}
                                 <div class="table-responsive">
-                                    <table class="table table-sm">
-                                        <thead>
+                                    <table class="table table-sm table-hover align-middle mb-0">
+                                        <thead class="table-light">
                                             <tr>
-                                                <th>Order #</th>
-                                                <th>Customer</th>
-                                                <th>Amount</th>
-                                                <th>Status</th>
+                                                <th class="text-secondary">Order #</th>
+                                                <th class="text-secondary">Customer</th>
+                                                <th class="text-secondary">Amount</th>
+                                                <th class="text-secondary">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for order in recent_orders %}
                                             <tr>
-                                                <td>#{{ order.id }}</td>
-                                                <td>{{ order.customer_name }}</td>
-                                                <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                                                <td><span class="fw-bold text-dark">#{{ order.id }}</span></td>
+                                                <td><span class="text-dark">{{ order.customer_name }}</span></td>
+                                                <td><span class="fw-bold text-success">₹{{ "%.2f"|format(order.total_amount) }}</span></td>
                                                 <td>
-                                                    <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">
+                                                    <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}-subtle text-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %} rounded-pill">
                                                         {{ order.status.title() }}
                                                     </span>
                                                 </td>
@@ -165,6 +160,56 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="row g-4">
+                <!-- Not Selling Products -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm transition-3d-hover">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-secondary">Not Selling Products</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                        <div class="card-body">
+                            {% if not_selling_products %}
+                                <div class="list-group list-group-flush">
+                                    {% for product in not_selling_products %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <span class="fw-semibold text-dark">{{ product.name }}</span>
+                                        <span class="badge bg-secondary-subtle text-secondary rounded-pill">Stock: {{ product.stock }}</span>
+                                    </li>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted">All products have sales!</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Categories List -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm transition-3d-hover">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-secondary">Products by Category</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                        <div class="card-body">
+                            {% if category_data %}
+                                <ul class="list-group list-group-flush">
+                                    {% for label, value in category_data %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <span class="fw-semibold text-dark">{{ label }}</span>
+                                        <span class="badge bg-primary-subtle text-primary rounded-pill">{{ value }} products</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">No categories found.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -174,15 +219,17 @@
 <script>
 // Revenue Chart
 const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-const revenueData = {{ monthly_revenue | tojson }};
+// Updated to use monthly_revenue_labels and monthly_revenue_values directly
+const monthlyRevenueLabels = JSON.parse('{{ monthly_revenue_labels | tojson | safe }}');
+const monthlyRevenueValues = JSON.parse('{{ monthly_revenue_values | tojson | safe }}');
 
 new Chart(revenueCtx, {
     type: 'line',
     data: {
-        labels: revenueData.map(item => item.month),
+        labels: monthlyRevenueLabels,
         datasets: [{
-            label: 'Revenue ($)',
-            data: revenueData.map(item => item.revenue),
+            label: 'Revenue (₹)',
+            data: monthlyRevenueValues,
             borderColor: '#0d6efd',
             backgroundColor: '#0d6efd20',
             borderWidth: 2,
@@ -197,30 +244,42 @@ new Chart(revenueCtx, {
                 beginAtZero: true,
                 ticks: {
                     callback: function(value) {
-                        return '$' + value.toFixed(2);
+                        return '₹' + value.toFixed(2);
+                    }
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    title: function(context) {
+                        // Customizing tooltip title for better readability
+                        const label = context[0].label;
+                        // If label is in YYYY-MM-DD format (daily/weekly data), reformat to a more readable date
+                        if (label.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                            const date = new Date(label);
+                            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                        } else if (label.match(/^\d{4}-\d{2}$/)) {
+                            // If label is in YYYY-MM format (monthly data), reformat to month year
+                            const [year, month] = label.split('-');
+                            const date = new Date(year, month - 1);
+                            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+                        }
+                        return label; // Fallback for other formats
+                    },
+                    label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed.y !== null) {
+                            label += '₹' + context.parsed.y.toFixed(2);
+                        }
+                        return label;
                     }
                 }
             }
         }
-    }
-});
-
-// Status Chart
-const statusCtx = document.getElementById('statusChart').getContext('2d');
-const statusData = {{ status_counts | tojson }};
-
-new Chart(statusCtx, {
-    type: 'doughnut',
-    data: {
-        labels: statusData.map(item => item[0].charAt(0).toUpperCase() + item[0].slice(1)),
-        datasets: [{
-            data: statusData.map(item => item[1]),
-            backgroundColor: ['#ffc107', '#0dcaf0', '#198754', '#dc3545', '#6f42c1']
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: true
     }
 });
 </script>

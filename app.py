@@ -7,6 +7,8 @@ from flask_login import LoginManager
 from sqlalchemy.orm import DeclarativeBase
 from werkzeug.middleware.proxy_fix import ProxyFix
 from supabase import create_client, Client
+import uuid # Import the uuid module
+from flask_mail import Mail # Import Flask-Mail
 
 # Load environment variables
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
@@ -20,6 +22,7 @@ class Base(DeclarativeBase):
 # Initialize extensions
 db = SQLAlchemy(model_class=Base)
 login_manager = LoginManager()
+mail = Mail() # Initialize Flask-Mail
 
 # Initialize Supabase client
 supabase_url = os.environ.get("SUPABASE_URL")
@@ -43,14 +46,21 @@ def create_app():
     # Configure Supabase credentials
     app.config["SUPABASE_URL"] = os.environ.get("SUPABASE_URL")
     app.config["SUPABASE_KEY"] = os.environ.get("SUPABASE_KEY")
+    app.config["SUPABASE_PRODUCTS_BUCKET"] = os.environ.get("SUPABASE_PRODUCTS_BUCKET", "product-images") # Default to 'product-images'
+    app.config["SUPABASE_SERVICE_ROLE_KEY"] = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 
-    # Configure upload folder
-    # app.config['UPLOAD_FOLDER'] = 'static/uploads'
-    # app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+    # Configure Flask-Mail
+    app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
+    app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT' or 587))
+    app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'true').lower() in ['true', 'on', '1']
+    app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+    app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
     
     # Initialize extensions with app
     db.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app) # Initialize Flask-Mail with the app
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Please log in to access this page.'
     login_manager.login_message_category = 'info'
@@ -62,12 +72,13 @@ def create_app():
     
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
+    # from api import api_bp # Commented out as api.py not found or not in use
     # app.register_blueprint(api_bp) # Commented out as api.py not found or not in use
 
     @login_manager.user_loader
     def load_user(user_id):
         from models import User # Import User model inside to avoid circular imports
-        return User.query.get(int(user_id))
+        return User.query.get(user_id)
 
     @app.context_processor
     def inject_global_data():
@@ -106,6 +117,7 @@ def init_db_and_admin(app):
         admin_user = User.query.filter_by(email='admin@msrshop.com').first()
         if not admin_user:
             admin_user = User(
+                id=str(uuid.uuid4()), # Generate a UUID for the admin user
                 name='System Admin',
                 email='admin@msrshop.com',
                 password_hash=generate_password_hash('admin123'),
@@ -118,4 +130,4 @@ def init_db_and_admin(app):
 if __name__ == '__main__':
     app = create_app()
     init_db_and_admin(app)
-    # app.run(debug=True) # This line is removed as per the new_code.
+    app.run(debug=True)

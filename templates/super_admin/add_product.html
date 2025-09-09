@@ -7,14 +7,17 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2">
-            <div class="bg-white rounded shadow-sm p-3">
+            <div class="sidebar bg-white rounded shadow-sm p-3">
                 <h6 class="text-muted mb-3">SUPER ADMIN</h6>
                 <nav class="nav flex-column">
                     <a class="nav-link" href="{{ url_for('main.super_admin_dashboard') }}">
                         <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                     </a>
-                    <a class="nav-link active" href="{{ url_for('main.super_admin_products') }}">
-                        <i class="fas fa-box me-2"></i>Products
+                    <a class="nav-link active" href="{{ url_for('main.add_product') }}">
+                        <i class="fas fa-plus me-2"></i>Add Product
+                    </a>
+                    <a class="nav-link" href="{{ url_for('main.super_admin_products') }}">
+                        <i class="fas fa-boxes me-2"></i>Manage Products
                     </a>
                     <a class="nav-link" href="{{ url_for('main.super_admin_orders') }}">
                         <i class="fas fa-shopping-cart me-2"></i>Orders
@@ -26,30 +29,30 @@
         <!-- Main Content -->
         <div class="col-md-9 col-lg-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Add New Product</h2>
-                <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-secondary">
+                <h2 class="fw-bold text-primary mb-0">Add New Product</h2>
+                <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-secondary btn-lg rounded-pill shadow-sm">
                     <i class="fas fa-arrow-left me-2"></i>Back to Products
                 </a>
             </div>
             
             <!-- Add Product Form -->
             <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Product Information</h5>
+                <div class="col-lg-12 col-xl-10">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-muted">Product Information</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-4">
                             <form method="POST" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="name" class="form-label">Product Name *</label>
-                                        <input type="text" class="form-control" id="name" name="name" required>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label for="name" class="form-label fw-bold">Product Name *</label>
+                                        <input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="Enter product name" required>
                                     </div>
                                     
-                                    <div class="col-md-6 mb-3">
-                                        <label for="category_id" class="form-label">Category *</label>
-                                        <select class="form-select" id="category_id" name="category_id" required>
+                                    <div class="col-md-6">
+                                        <label for="category_id" class="form-label fw-bold">Category *</label>
+                                        <select class="form-select form-select-sm" id="category_id" name="category_id" required>
                                             <option value="">Select Category</option>
                                             {% for category in categories %}
                                             <option value="{{ category.id }}">{{ category.name }}</option>
@@ -59,79 +62,83 @@
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" name="description" rows="4" 
-                                              placeholder="Describe your product..."></textarea>
+                                    <label for="description" class="form-label fw-bold">Description</label>
+                                    <textarea class="form-control form-control-sm" id="description" name="description" rows="3" 
+                                              placeholder="Provide a detailed description of your product..."></textarea>
                                 </div>
                                 
-                                <div class="mb-3">
-                                    <label for="brand" class="form-label">Brand</label>
-                                    <input type="text" class="form-control" id="brand" name="brand" placeholder="e.g., CARTADEN">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label for="brand" class="form-label fw-bold">Brand</label>
+                                        <input type="text" class="form-control form-control-sm" id="brand" name="brand" placeholder="e.g., CARTADEN">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="dimensions" class="form-label fw-bold">Dimensions</label>
+                                        <input type="text" class="form-control form-control-sm" id="dimensions" name="dimensions" 
+                                               placeholder="e.g., Large: 35.5x25.4x3.8 cm, Medium: ...">
+                                        <small class="text-muted">Enter dimensions for all product variations (Optional)</small>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="dimensions" class="form-label">Dimensions</label>
-                                    <input type="text" class="form-control" id="dimensions" name="dimensions" 
-                                           placeholder="e.g., Large: 35.5x25.4x3.8 cm, Medium: ...">
-                                    <small class="text-muted">Enter dimensions for all product variations (Optional)</small>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="price" class="form-label">Price ($) *</label>
-                                        <input type="number" class="form-control" id="price" name="price" 
-                                               step="0.01" min="0" required>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label for="price" class="form-label fw-bold">Price (₹) *</label>
+                                        <input type="number" class="form-control form-control-sm" id="price" name="price" 
+                                               step="0.01" min="0" placeholder="e.g., 99.99" required>
                                     </div>
                                     
-                                    <div class="col-md-6 mb-3">
-                                        <label for="original_price" class="form-label">Original Price ($)</label>
-                                        <input type="number" class="form-control" id="original_price" name="original_price" 
-                                               step="0.01" min="0">
+                                    <div class="col-md-6">
+                                        <label for="original_price" class="form-label fw-bold">Original Price (₹)</label>
+                                        <input type="number" class="form-control form-control-sm" id="original_price" name="original_price" 
+                                               step="0.01" min="0" placeholder="Optional: For discount pricing">
                                         <small class="text-muted">Set if product is on discount (Optional)</small>
                                     </div>
                                 </div>
                                 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="stock" class="form-label">Stock Quantity *</label>
-                                        <input type="number" class="form-control" id="stock" name="stock" 
-                                               min="0" required>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label for="stock" class="form-label fw-bold">Stock Quantity *</label>
+                                        <input type="number" class="form-control form-control-sm" id="stock" name="stock" 
+                                               min="0" placeholder="e.g., 100" required>
                                     </div>
                                 
-                                    <div class="col-md-6 mb-3">
-                                        <label for="sales_count" class="form-label">Sales Count (past month)</label>
-                                        <input type="number" class="form-control" id="sales_count" name="sales_count" 
-                                               min="0" value="0">
+                                    <div class="col-md-6">
+                                        <label for="sales_count" class="form-label fw-bold">Sales Count (past month)</label>
+                                        <input type="number" class="form-control form-control-sm" id="sales_count" name="sales_count" 
+                                               min="0" value="0" placeholder="e.g., 200 for '200+ bought'">
                                         <small class="text-muted">e.g., 200 for '200+ bought' (Optional)</small>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ratings" class="form-label">Ratings (1.0 - 5.0)</label>
-                                        <input type="number" class="form-control" id="ratings" name="ratings" 
-                                               step="0.1" min="0.0" max="5.0" value="0.0">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label for="ratings" class="form-label fw-bold">Ratings (1.0 - 5.0)</label>
+                                        <input type="number" class="form-control form-control-sm" id="ratings" name="ratings" 
+                                               step="0.1" min="0.0" max="5.0" value="0.0" placeholder="e.g., 4.5">
                                         <small class="text-muted">Average customer rating (Optional)</small>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="num_ratings" class="form-label">Number of Ratings</label>
-                                        <input type="number" class="form-control" id="num_ratings" name="num_ratings" 
-                                               min="0" value="0">
+                                    <div class="col-md-6">
+                                        <label for="num_ratings" class="form-label fw-bold">Number of Ratings</label>
+                                        <input type="number" class="form-control form-control-sm" id="num_ratings" name="num_ratings" 
+                                               min="0" value="0" placeholder="e.g., 150">
                                         <small class="text-muted">Total number of customer ratings (Optional)</small>
                                     </div>
                                 </div>
                                 
-                                <div class="mb-4">
-                                    <label for="images" class="form-label">Product Images</label>
-                                    <input type="file" class="form-control" id="images" name="images" 
+                                <div class="mb-3">
+                                    <label for="images" class="form-label fw-bold">Product Images</label>
+                                    <input type="file" class="form-control form-control-sm" id="images" name="images" 
                                            accept="image/*" multiple>
                                     <small class="text-muted">Upload multiple images for your product (Optional)</small>
                                 </div>
                                 
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-secondary">Cancel</a>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-2"></i>Add Product
+                                    <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-sm btn-outline-secondary rounded-pill">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-sm btn-primary rounded-pill shadow-sm">
+                                        <i class="fas fa-plus me-2"></i>Add Product
                                     </button>
                                 </div>
                             </form>

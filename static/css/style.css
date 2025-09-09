@@ -2,21 +2,28 @@
 
 /* Root Variables for Light Theme */
 :root {
-    --primary-color: #fd7e14; /* Orange from logo */
-    --primary-color-rgb: 253, 126, 20; /* RGB values for --primary-color */
-    --secondary-color: #6c757d;
-    --success-color: #198754;
-    --warning-color: #ffc107;
-    --danger-color: #e66b00; /* A darker orange/red for danger */
-    --info-color: #0dcaf0;
-    --light-color: #f8f9fa;
-    --dark-color: #212529;
+    --primary-color: #6a1b9a; /* Deep Purple */
+    --primary-color-rgb: 106, 27, 154;
+    --secondary-color: #424242; /* Dark Grey */
+    --success-color: #4caf50; /* Green */
+    --warning-color: #ff9800; /* Orange */
+    --warning-color-rgb: 255, 152, 0;
+    --danger-color: #f44336; /* Red */
+    --info-color: #2196f3; /* Blue */
+    --light-color: #f5f5f5; /* Lighter background */
+    --dark-color: #212121; /* Darker text */
     --white-color: #ffffff;
-    --border-color: #dee2e6;
-    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    --border-radius: 0.375rem;
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --border-color: #e0e0e0; /* Light grey border */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --border-radius: 0.5rem; /* Slightly larger border-radius */
+    --font-family: 'Roboto', sans-serif; /* Modern font */
+    
+    /* New custom colors for gradients and accents */
+    --gradient-start: #8e24aa; /* Lighter Purple */
+    --gradient-end: #5e35b1; /* Darker Purple */
+    --text-light: #bdbdbd; /* Light grey text */
+    --icon-bg-light: #e8eaf6; /* Very light blue/purple */
 }
 
 /* Global Styles */
@@ -80,6 +87,8 @@ body {
 .card-header {
     border-bottom: 1px solid var(--border-color);
     font-weight: 600;
+    background-color: var(--white-color); /* Ensure header background is white */
+    color: var(--secondary-color); /* Header text color */
 }
 
 /* Product Card Styling */
@@ -144,25 +153,14 @@ body {
 .custom-dropdown {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    background-color: var(--light-color);
-    padding: 0.5rem 1rem;
-    height: calc(2.25rem + 2px); /* Match Bootstrap form-control height */
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
+    background-color: var(--white-color);
     color: var(--dark-color);
-    -webkit-appearance: none; /* Remove default arrow */
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 16px 12px;
+    padding-right: 2.25rem !important;
 }
 
 .custom-dropdown:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
 }
 
 /* Button Enhancements */
@@ -179,12 +177,14 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #e66b00 100%); /* Adjusted gradient */
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
     border: none;
+    color: var(--white-color);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #e66b00 0%, #cc5f00 100%); /* Adjusted hover gradient */
+    background: linear-gradient(135deg, var(--gradient-end) 0%, var(--gradient-start) 100%);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-outline-primary {
@@ -206,12 +206,14 @@ body {
 }
 
 .btn-success {
-    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
     border: none;
+    color: var(--white-color);
 }
 
 .btn-success:hover {
-    background: linear-gradient(135deg, #146c43 0%, #0f5132 100%);
+    background: linear-gradient(135deg, #43a047 0%, #388e3c 100%);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Hero Section */
@@ -242,7 +244,7 @@ body {
 
 .form-control:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
 }
 
 .input-group-text {
@@ -274,8 +276,8 @@ body {
 }
 
 .alert-warning {
-    background-color: rgba(255, 193, 7, 0.1);
-    color: #996404;
+    background-color: rgba(255, 152, 0, 0.1);
+    color: var(--warning-color);
 }
 
 /* Badge Styling */
@@ -296,16 +298,31 @@ body {
 /* Table Styling */
 .table {
     background-color: var(--white-color);
+    border-radius: var(--border-radius);
+    overflow: hidden; /* Ensures rounded corners apply to table content */
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-top: 1px solid var(--border-color);
 }
 
 .table th {
     background-color: var(--light-color);
     font-weight: 600;
     border-bottom: 2px solid var(--border-color);
+    color: var(--secondary-color);
 }
 
 .table-hover tbody tr:hover {
-    background-color: rgba(13, 110, 253, 0.05);
+    background-color: var(--icon-bg-light); /* Lighter hover for rows */
+}
+
+.table .badge {
+    padding: 0.5em 0.8em;
+    font-size: 0.85em;
 }
 
 /* Modal Enhancements */
@@ -348,6 +365,32 @@ body {
 /* Footer */
 footer {
     margin-top: auto;
+    background-color: var(--dark-color);
+    color: var(--text-light);
+}
+
+footer h5 {
+    color: var(--white-color);
+}
+
+footer a {
+    color: var(--text-light);
+}
+
+footer a:hover {
+    color: var(--primary-color);
+}
+
+footer .text-light-emphasis {
+    color: var(--text-light) !important;
+}
+
+footer .icon {
+    color: var(--primary-color);
+}
+
+footer .footer-divider {
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Animations */
@@ -441,6 +484,115 @@ footer {
 
 .bg-gradient-success {
     background: linear-gradient(135deg, var(--success-color) 0%, #146c43 100%);
+}
+
+/* New styles for dashboard enhancements */
+.transition-3d-hover {
+    transition: all 0.2s ease-in-out;
+}
+
+.transition-3d-hover:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--shadow);
+}
+
+.icon-lg {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    min-height: 60px;
+    font-size: 2rem;
+}
+
+.bg-primary-subtle {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-success-subtle {
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+.bg-info-subtle {
+    background-color: rgba(13, 202, 240, 0.1);
+}
+
+.bg-warning-subtle {
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+/* Enhanced Sidebar Styles */
+.sidebar {
+    background-color: var(--white-color);
+    border-right: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link {
+    color: var(--dark-color);
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+    margin-right: 0.75rem;
+    color: var(--secondary-color);
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: var(--light-color);
+    color: var(--primary-color) !important;
+    transform: translateX(5px);
+}
+
+.sidebar .nav-link:hover i {
+    color: var(--primary-color) !important;
+}
+
+.sidebar .nav-link.active {
+    background: linear-gradient(90deg, rgba(var(--primary-color-rgb), 0.1) 0%, rgba(var(--primary-color-rgb), 0.2) 100%);
+    color: var(--primary-color) !important;
+    font-weight: 700;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 0.75rem; /* Adjust padding for border */
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebar .nav-link.active i {
+    color: var(--primary-color) !important;
+}
+
+.sidebar h6 {
+    color: var(--secondary-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+}
+
+/* Adjustments for existing elements that might be affected */
+.container-fluid.py-4 .row .col-md-3.col-lg-2 .bg-white.rounded.shadow-sm.p-3 {
+    padding: 0 !important; /* Remove padding from parent div as sidebar handles it */
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
 }
 
 /* Checkout Page Specific */
@@ -673,42 +825,35 @@ footer {
 }
 
 .custom-search-bar .input-group {
-    border: 2px solid #fd7e14; /* Orange border */
-    border-radius: 5px; /* Slightly rounded corners */
-    overflow: hidden; /* Ensures child elements respect border-radius */
+    border: 2px solid var(--border-color); /* Softer border for search */
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }
 
-.custom-search-bar .form-select.custom-dropdown {
-    background-color: var(--light-color); /* Light gray background */
+.custom-search-bar .input-group .custom-dropdown {
+    flex: 0 0 25%; /* Allocate 25% width to the dropdown */
+    max-width: 25%;
+    background-color: var(--light-color);
     border: none;
-    border-right: 1px solid var(--border-color); /* Separator line */
-    width: 100px; /* Fixed width for the dropdown */
-    flex-grow: 0; /* Prevent it from growing */
-    padding-right: 25px; /* Space for dropdown arrow */
-    -webkit-appearance: none; /* Remove default arrow on WebKit */
-    -moz-appearance: none; /* Remove default arrow on Firefox */
-    appearance: none; /* Remove default arrow */
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); /* Custom SVG arrow */
-    background-repeat: no-repeat;
-    background-position: right .75rem center;
-    background-size: 16px 12px;
+    border-right: 1px solid var(--border-color);
+    color: var(--dark-color);
 }
 
-.custom-search-bar .form-control.custom-search-input {
+.custom-search-bar .input-group .custom-search-input {
+    flex: 1 1 auto; /* Allow search input to take remaining space */
     border: none;
-    box-shadow: none; /* Remove focus shadow */
-    flex-grow: 1; /* Allow search input to grow */
+    border-radius: 0;
 }
 
 .custom-search-bar .btn.custom-search-button {
-    background-color: #fd7e14; /* Orange background */
-    color: #fff; /* White icon */
+    background-color: var(--warning-color);
+    color: var(--white-color);
     border: none;
-    border-radius: 0 5px 5px 0; /* Rounded only on the right */
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 .custom-search-bar .btn.custom-search-button:hover {
-    background-color: #e66b00; /* Darker orange on hover */
+    background-color: #fb8c00; /* A slightly darker orange for hover */
 }
 
 /* Responsive adjustments for search bar */
@@ -717,4 +862,336 @@ footer {
         width: 100%;
         margin-top: 10px;
     }
+}
+
+/* Custom search input group */
+.custom-search-input {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+}
+
+.custom-search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
+}
+
+.custom-search-button {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white-color);
+    border-radius: var(--border-radius);
+}
+
+.custom-search-button:hover {
+    background-color: var(--gradient-end);
+    border-color: var(--gradient-end);
+}
+
+/* New custom classes for gradients */
+.bg-gradient-purple {
+    background: linear-gradient(135deg, #8e24aa 0%, #5e35b1 100%);
+    color: var(--white-color);
+}
+
+.bg-gradient-green {
+    background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+    color: var(--white-color);
+}
+
+.bg-gradient-blue {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    color: var(--white-color);
+}
+
+.bg-gradient-orange {
+    background: linear-gradient(135deg, #ff9800 0%, #fb8c00 100%);
+    color: var(--white-color);
+}
+
+.bg-gradient-red {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: var(--white-color);
+}
+
+/* Icon background color */
+.icon-bg-primary-light {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-color);
+}
+
+.icon-bg-success-light {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--success-color);
+}
+
+.icon-bg-info-light {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: var(--info-color);
+}
+
+.icon-bg-warning-light {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: var(--warning-color);
+}
+
+/* Override for specific elements */
+.navbar-brand .text-primary {
+    color: var(--dark-color) !important; /* Keep brand text dark for contrast */
+}
+
+.navbar-brand .text-primary:hover {
+    color: var(--primary-color) !important;
+}
+
+.custom-search-bar .input-group {
+    border: 2px solid var(--border-color); /* Softer border for search */
+}
+
+.custom-search-bar .btn.custom-search-button {
+    background-color: var(--primary-color); /* Use primary color for search button */
+}
+
+.custom-search-bar .btn.custom-search-button:hover {
+    background-color: var(--gradient-end); /* Match hover with new gradients */
+}
+
+/* Adjustments for general text within dashboard cards */
+.card-body h3.display-5 {
+    color: var(--dark-color) !important; /* Ensure stats numbers are dark */
+}
+
+.card-body .text-muted {
+    color: var(--secondary-color) !important; /* Consistent muted text */
+}
+
+/* Chart.js Specific styles for admin dashboard revenue chart */
+#revenueChart + .card-footer {
+    border-top: 1px solid var(--border-color);
+    background-color: var(--light-color);
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+}
+
+/* Category List Enhancements */
+.list-group-item {
+    border-color: var(--border-color);
+    background-color: var(--white-color);
+    color: var(--dark-color);
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: var(--light-color);
+    transform: translateX(3px);
+}
+
+.list-group-item .badge {
+    background-color: var(--primary-color) !important;
+    color: var(--white-color) !important;
+}
+
+/* Sidebar adjustments (if any are needed for admin dashboard) */
+.col-12 .sidebar {
+    height: auto; /* Allow sidebar to fit content on admin dashboard */
+    position: static; /* Remove sticky behavior if it's not in a dedicated column */
+    margin-bottom: 2rem; /* Add spacing below the sidebar if it's in main content */
+    box-shadow: var(--shadow); /* More prominent shadow for the contained sidebar */
+}
+
+/* Ensure proper contrast for text over new gradient backgrounds */
+.card.bg-gradient-purple h3,
+.card.bg-gradient-green h3,
+.card.bg-gradient-blue h3,
+.card.bg-gradient-orange h3 {
+    color: var(--white-color) !important;
+}
+
+.card.bg-gradient-purple h6,
+.card.bg-gradient-green h6,
+.card.bg-gradient-blue h6,
+.card.bg-gradient-orange h6 {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Custom search input group */
+.custom-search-input {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+}
+
+.custom-search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
+}
+
+.custom-search-button {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white-color);
+    border-radius: var(--border-radius);
+}
+
+.custom-search-button:hover {
+    background-color: var(--gradient-end);
+    border-color: var(--gradient-end);
+}
+
+/* Custom dropdown */
+.custom-dropdown {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--white-color);
+    color: var(--dark-color);
+    padding-right: 2.25rem !important;
+}
+
+.custom-dropdown:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
+}
+
+/* Category and Product image styling */
+.product-img-thumbnail,
+.category-img-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-right: 1rem;
+}
+
+/* Super Admin Specific Overrides (ensure these are loaded last if needed) */
+.super-admin-sidebar {
+    /* Add specific styles for super admin sidebar if it needs a different look */
+}
+
+/* Category Pills Styling */
+.category-pills-container {
+    padding: 1rem 1.5rem; /* Reduced vertical padding */
+    background-color: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+    white-space: nowrap; /* Keep all pills in one line */
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.category-pill {
+    background: linear-gradient(45deg, var(--primary-color), var(--gradient-end));
+    color: var(--white-color);
+    border: none;
+    border-radius: 50px;
+    padding: 0.6rem 1.2rem; /* Slightly reduced padding */
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    display: inline-flex; /* Ensure it stays inline and respects padding/margin */
+    align-items: center; /* Vertically align icon and text */
+    flex-shrink: 0; /* Prevent items from shrinking */
+}
+
+.category-pill:hover {
+    background: linear-gradient(45deg, var(--gradient-end), var(--primary-color));
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow);
+}
+
+.category-pill.active {
+    background: var(--warning-color); /* Highlight active category with warning color */
+    box-shadow: 0 0 0 3px rgba(var(--warning-color-rgb), 0.5); /* Stronger shadow/border for active */
+    transform: scale(1.05);
+}
+
+/* Custom class to force flex items into a single line with scroll */
+.flex-nowrap-scroll {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Poster Card Styles for Multi-Item Carousel */
+.poster-card {
+    border: none !important;
+    box-shadow: var(--shadow-sm) !important; /* Start with a smaller shadow */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.poster-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow) !important; /* Larger shadow on hover */
+}
+
+.poster-card.center-popup {
+    transform: translateY(-10px) scale(1.08);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25) !important; /* Stronger shadow for popup */
+    z-index: 5; /* Bring to front */
+    position: relative;
+}
+
+.poster-card .card-img-top {
+    transition: transform 0.5s ease-in-out;
+}
+
+.poster-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.poster-card .card-img-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    transition: background 0.3s ease;
+}
+
+.poster-card:hover .card-img-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 70%);
+}
+
+.poster-card .card-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.poster-card .card-text {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.poster-card .btn-light {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--dark-color);
+    font-weight: 600;
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.poster-card .btn-light:hover {
+    background-color: var(--white-color);
+    transform: translateY(-2px);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%; /* Make control buttons wider for easier clicking */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.4); /* Darker background for visibility */
+    border-radius: 50%; /* Make them circular */
+    padding: 1.2rem; /* Increase padding for larger icon */
+}
+
+/* Remove container padding for full-width carousel */
+.section.bg-light.py-5 > .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
 }

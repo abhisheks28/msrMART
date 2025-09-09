@@ -41,7 +41,7 @@
                                     <small class="text-muted">By {{ item.product.owner.name }}</small>
                                 </div>
                                 <div class="col-md-2 text-center">
-                                    <span class="fw-bold text-primary">${{ "%.2f"|format(item.product.price) }}</span>
+                                    <span class="fw-bold text-primary">₹{{ "%.2f"|format(item.product.price) }}</span>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="d-flex align-items-center justify-content-center">
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-center">
-                                    <span class="fw-bold">${{ "%.2f"|format(item.product.price * item.quantity) }}</span>
+                                    <span class="fw-bold">₹{{ "%.2f"|format(item.product.price * item.quantity) }}</span>
                                 </div>
                                 <div class="col-md-1 text-center">
                                     <a href="{{ url_for('main.update_cart', cart_id=item.id, action='remove') }}" 
@@ -82,7 +82,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Subtotal ({{ cart_items|length }} items):</span>
-                            <span>${{ "%.2f"|format(total) }}</span>
+                            <span>₹{{ "%.2f"|format(total) }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span>Shipping:</span>
@@ -95,7 +95,7 @@
                         <hr>
                         <div class="d-flex justify-content-between mb-3">
                             <strong>Total:</strong>
-                            <strong class="text-primary">${{ "%.2f"|format(total) }}</strong>
+                            <strong class="text-primary">₹{{ "%.2f"|format(total) }}</strong>
                         </div>
                         
                         <a href="{{ url_for('main.checkout') }}" class="btn btn-primary w-100 py-2 mb-3">

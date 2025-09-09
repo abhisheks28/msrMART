@@ -7,14 +7,17 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2">
-            <div class="bg-white rounded shadow-sm p-3">
+            <div class="sidebar bg-white rounded shadow-sm p-3">
                 <h6 class="text-muted mb-3">SUPER ADMIN</h6>
                 <nav class="nav flex-column">
                     <a class="nav-link" href="{{ url_for('main.super_admin_dashboard') }}">
                         <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                     </a>
+                    <a class="nav-link" href="{{ url_for('main.add_product') }}">
+                        <i class="fas fa-plus me-2"></i>Add Product
+                    </a>
                     <a class="nav-link" href="{{ url_for('main.super_admin_products') }}">
-                        <i class="fas fa-box me-2"></i>Products
+                        <i class="fas fa-boxes me-2"></i>Manage Products
                     </a>
                     <a class="nav-link active" href="{{ url_for('main.super_admin_orders') }}">
                         <i class="fas fa-shopping-cart me-2"></i>Orders
@@ -26,49 +29,50 @@
         <!-- Main Content -->
         <div class="col-md-9 col-lg-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Order Management</h2>
-                <div class="d-flex gap-2">
-                    <select class="form-select" style="width: auto;">
+                <h2 class="fw-bold text-primary mb-0">Order Management</h2>
+                <div class="d-flex gap-2 align-items-center">
+                    <label for="orderStatusFilter" class="form-label mb-0 text-muted">Filter by Status:</label>
+                    <select class="form-select form-select-lg rounded-pill shadow-sm" id="orderStatusFilter" style="width: auto;">
                         <option>All Status</option>
                         <option>Pending</option>
                         <option>Processing</option>
                         <option>Shipped</option>
                         <option>Delivered</option>
+                        <option>Cancelled</option>
                     </select>
                 </div>
             </div>
             
             <!-- Orders Table -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Orders Containing Your Products</h5>
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 text-muted">Orders Containing Your Products</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     {% if orders %}
                         <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
                                     <tr>
-                                        <th>Order #</th>
-                                        <th>Customer</th>
-                                        <th>Date</th>
-                                        <th>Items</th>
-                                        <th>Total</th>
-                                        <th>Payment</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th scope="col" class="text-uppercase text-muted">Order #</th>
+                                        <th scope="col" class="text-uppercase text-muted">Customer</th>
+                                        <th scope="col" class="text-uppercase text-muted">Date</th>
+                                        <th scope="col" class="text-uppercase text-muted">Items</th>
+                                        <th scope="col" class="text-uppercase text-muted">Total</th>
+                                        <th scope="col" class="text-uppercase text-muted">Payment</th>
+                                        <th scope="col" class="text-uppercase text-muted">Status</th>
+                                        <th scope="col" class="text-uppercase text-muted">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for order in orders %}
                                     <tr>
                                         <td>
-                                            <strong>#{{ order.id }}</strong>
+                                            <span class="fw-bold">#{{ order.id }}</span>
                                         </td>
                                         <td>
                                             <div>
-                                                <strong>{{ order.customer.name }}</strong>
-                                                <br>
+                                                <h6 class="mb-0">{{ order.customer.name }}</h6>
                                                 <small class="text-muted">{{ order.customer.email }}</small>
                                             </div>
                                         </td>
@@ -76,38 +80,38 @@
                                             <div>
                                                 {{ order.created_at.strftime('%Y-%m-%d') }}
                                                 <br>
-                                                <small class="text-muted">{{ order.created_at.strftime('%H:%M') }}</small>
+                                                <small class="text-muted">{{ order.created_at.strftime('%H:%M %p') }}</small>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="small">
+                                            <div class="small text-muted">
                                                 {% for item in order.order_items %}
                                                     {% if item.product.super_admin_id == current_user.id %}
-                                                        <div>{{ item.product.name }} ({{ item.quantity }})</div>
+                                                        <div>{{ item.product.name }} (x{{ item.quantity }})</div>
                                                     {% endif %}
                                                 {% endfor %}
                                             </div>
                                         </td>
-                                        <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                                        <td><span class="fw-bold text-success">₹{{ "%.2f"|format(order.total_amount) }}</span></td>
                                         <td>
-                                            <span class="badge bg-{% if order.payment_method == 'cod' %}warning{% else %}success{% endif %}">
+                                            <span class="badge bg-{% if order.payment_method == 'cod' %}warning{% else %}success{% endif %} rounded-pill mb-1">
                                                 {{ order.payment_method.upper() }}
                                             </span>
                                             <br>
-                                            <small class="badge bg-{% if order.payment_status == 'paid' %}success{% else %}warning{% endif %}">
+                                            <span class="badge bg-{% if order.payment_status == 'paid' %}success{% else %}warning{% endif %} rounded-pill">
                                                 {{ order.payment_status.title() }}
-                                            </small>
+                                            </span>
                                         </td>
                                         <td>
-                                            <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'processing' %}primary{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">
+                                            <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'processing' %}primary{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %} fs-6 rounded-pill">
                                                 {{ order.status.title() }}
                                             </span>
                                         </td>
                                         <td>
                                             {% if order.status in ['pending', 'processing', 'shipped'] %}
                                                 <div class="dropdown">
-                                                    <button class="btn btn-outline-primary btn-sm dropdown-toggle" 
-                                                            type="button" data-bs-toggle="dropdown">
+                                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle rounded-pill" 
+                                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                         Update Status
                                                     </button>
                                                     <ul class="dropdown-menu">
@@ -115,7 +119,7 @@
                                                             <li>
                                                                 <a class="dropdown-item" 
                                                                    href="{{ url_for('main.update_order_status', order_id=order.id, status='processing') }}">
-                                                                    Mark as Processing
+                                                                    <i class="fas fa-hourglass-half me-2"></i>Mark as Processing
                                                                 </a>
                                                             </li>
                                                         {% endif %}
@@ -123,7 +127,7 @@
                                                             <li>
                                                                 <a class="dropdown-item" 
                                                                    href="{{ url_for('main.update_order_status', order_id=order.id, status='shipped') }}">
-                                                                    Mark as Shipped
+                                                                    <i class="fas fa-truck me-2"></i>Mark as Shipped
                                                                 </a>
                                                             </li>
                                                         {% endif %}
@@ -131,7 +135,17 @@
                                                             <li>
                                                                 <a class="dropdown-item" 
                                                                    href="{{ url_for('main.update_order_status', order_id=order.id, status='delivered') }}">
-                                                                    Mark as Delivered
+                                                                    <i class="fas fa-check-circle me-2"></i>Mark as Delivered
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
+                                                        {% if order.status in ['pending', 'processing', 'shipped'] %}
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li>
+                                                                <a class="dropdown-item text-danger" 
+                                                                   href="{{ url_for('main.update_order_status', order_id=order.id, status='cancelled') }}"
+                                                                   onclick="return confirm('Are you sure you want to cancel this order?')">
+                                                                    <i class="fas fa-times-circle me-2"></i>Cancel Order
                                                                 </a>
                                                             </li>
                                                         {% endif %}
@@ -148,9 +162,12 @@
                         </div>
                     {% else %}
                         <div class="text-center py-5">
-                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No Orders Yet</h5>
-                            <p class="text-muted">Orders containing your products will appear here.</p>
+                            <i class="fas fa-shopping-cart fa-5x text-muted mb-3"></i>
+                            <h4 class="text-muted mb-2">No Orders Yet</h4>
+                            <p class="text-muted lead mb-4">Orders containing your products will appear here.</p>
+                            <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-primary btn-lg rounded-pill shadow-sm animate__animated animate__pulse animate__infinite">
+                                <i class="fas fa-plus me-2"></i>Manage Products
+                            </a>
                         </div>
                     {% endif %}
                 </div>

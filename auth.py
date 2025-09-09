@@ -32,6 +32,7 @@ def login():
                 })
                 if supabase_response.user and supabase_response.session:
                     session['supabase_jwt'] = supabase_response.session.access_token
+                    session['supabase_refresh_token'] = supabase_response.session.refresh_token
                     flash(f'Welcome back, {user.name}! Supabase session established.', 'success')
                 else:
                     flash('Supabase login failed, but local login successful.', 'warning')
@@ -113,6 +114,26 @@ def register():
             db.session.add(user_to_register) # Add/update the user in the session
             db.session.commit()
             flash('Registration successful! Please log in.', 'success')
+            
+            # Register user with Supabase Auth as well
+            try:
+                supabase_response = supabase_client.auth.sign_up({
+                    "email": user_to_register.email,
+                    "password": password,
+                    "options": {
+                        "data": {"name": name, "role": user_to_register.role}
+                    }
+                })
+                if supabase_response.user and supabase_response.session:
+                    session['supabase_jwt'] = supabase_response.session.access_token
+                    session['supabase_refresh_token'] = supabase_response.session.refresh_token
+                    flash('Registration successful with Supabase! Please log in.', 'success')
+                else:
+                    flash('Local registration successful, but Supabase registration failed.', 'warning')
+            except Exception as e:
+                current_app.logger.error(f"Supabase registration error: {e}")
+                flash(f'Local registration successful, but Supabase registration failed: {str(e)}', 'warning')
+
             return redirect(url_for('auth.login'))
         except Exception as e:
             db.session.rollback()

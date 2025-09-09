@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}View Super Admin - MSR Shop{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 text-dark">View Super Admin Details</h2>
+        <a href="{{ url_for('main.admin_super_admins') }}" class="btn btn-secondary btn-lg rounded-pill shadow-sm">
+            <i class="fas fa-arrow-left me-2"></i>Back to Super Admins
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm transition-3d-hover">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 text-secondary">Super Admin Information</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">ID:</div>
+                <div class="col-md-8 text-muted">{{ super_admin.id }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">Name:</div>
+                <div class="col-md-8 text-muted">{{ super_admin.name }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">Email:</div>
+                <div class="col-md-8 text-muted">{{ super_admin.email }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">Role:</div>
+                <div class="col-md-8 text-muted">{{ super_admin.role.replace('_', ' ').title() }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">Unique Code:</div>
+                <div class="col-md-8 text-muted">{{ super_admin.unique_code or 'N/A' }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">Status:</div>
+                <div class="col-md-8">
+                    <span class="badge bg-{% if super_admin.is_active %}success{% else %}danger{% endif %}-subtle text-{% if super_admin.is_active %}success{% else %}danger{% endif %} rounded-pill">
+                        {{ 'Active' if super_admin.is_active else 'Inactive' }}
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">Created At:</div>
+                <div class="col-md-8 text-muted">{{ super_admin.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-semibold text-dark">Assigned Categories:</div>
+                <div class="col-md-8">
+                    {% if super_admin.categories %}
+                        {% for category in super_admin.categories %}
+                            <span class="badge bg-info-subtle text-info me-1">{{ category.name }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-muted">No categories assigned</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light text-end">
+            <a href="{{ url_for('main.admin_edit_super_admin', user_id=super_admin.id) }}" class="btn btn-warning me-2">
+                <i class="fas fa-edit me-1"></i> Edit Super Admin
+            </a>
+            <a href="{{ url_for('main.toggle_super_admin', user_id=super_admin.id) }}" 
+               class="btn btn-{% if super_admin.is_active %}danger{% else %}success{% endif %}">
+                {% if super_admin.is_active %}<i class="fas fa-user-slash me-1"></i> Deactivate{% else %}<i class="fas fa-user-check me-1"></i> Activate{% endif %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

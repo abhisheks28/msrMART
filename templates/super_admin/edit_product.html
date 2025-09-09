@@ -7,14 +7,17 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2">
-            <div class="bg-white rounded shadow-sm p-3">
+            <div class="sidebar bg-white rounded shadow-sm p-3">
                 <h6 class="text-muted mb-3">SUPER ADMIN</h6>
                 <nav class="nav flex-column">
                     <a class="nav-link" href="{{ url_for('main.super_admin_dashboard') }}">
                         <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                     </a>
+                    <a class="nav-link" href="{{ url_for('main.add_product') }}">
+                        <i class="fas fa-plus me-2"></i>Add Product
+                    </a>
                     <a class="nav-link active" href="{{ url_for('main.super_admin_products') }}">
-                        <i class="fas fa-box me-2"></i>Products
+                        <i class="fas fa-boxes me-2"></i>Manage Products
                     </a>
                     <a class="nav-link" href="{{ url_for('main.super_admin_orders') }}">
                         <i class="fas fa-shopping-cart me-2"></i>Orders
@@ -26,31 +29,31 @@
         <!-- Main Content -->
         <div class="col-md-9 col-lg-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Edit Product</h2>
-                <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-secondary">
+                <h2 class="fw-bold text-primary mb-0">Edit Product</h2>
+                <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-secondary btn-lg rounded-pill shadow-sm">
                     <i class="fas fa-arrow-left me-2"></i>Back to Products
                 </a>
             </div>
             
             <!-- Edit Product Form -->
             <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Product Information</h5>
+                <div class="col-lg-10 col-xl-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-muted">Product Information</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-4">
                             <form method="POST" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="name" class="form-label">Product Name *</label>
-                                        <input type="text" class="form-control" id="name" name="name" 
-                                               value="{{ product.name }}" required>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="name" class="form-label fw-bold">Product Name *</label>
+                                        <input type="text" class="form-control form-control-lg" id="name" name="name" 
+                                               value="{{ product.name }}" placeholder="Enter product name" required>
                                     </div>
                                     
-                                    <div class="col-md-6 mb-3">
-                                        <label for="category_id" class="form-label">Category *</label>
-                                        <select class="form-select" id="category_id" name="category_id" required>
+                                    <div class="col-md-6">
+                                        <label for="category_id" class="form-label fw-bold">Category *</label>
+                                        <select class="form-select form-select-lg" id="category_id" name="category_id" required>
                                             {% for category in categories %}
                                             <option value="{{ category.id }}" 
                                                     {% if category.id == product.category_id %}selected{% endif %}>
@@ -61,43 +64,92 @@
                                     </div>
                                 </div>
                                 
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" name="description" rows="4">{{ product.description or '' }}</textarea>
+                                <div class="mb-4">
+                                    <label for="description" class="form-label fw-bold">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="5" 
+                                              placeholder="Provide a detailed description of your product...">{{ product.description or '' }}</textarea>
                                 </div>
                                 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="price" class="form-label">Price ($) *</label>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="brand" class="form-label fw-bold">Brand</label>
+                                        <input type="text" class="form-control" id="brand" name="brand" 
+                                               value="{{ product.brand or '' }}" placeholder="e.g., CARTADEN">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="dimensions" class="form-label fw-bold">Dimensions</label>
+                                        <input type="text" class="form-control" id="dimensions" name="dimensions" 
+                                               value="{{ product.dimensions or '' }}" placeholder="e.g., Large: 35.5x25.4x3.8 cm, Medium: ...">
+                                        <small class="text-muted">Enter dimensions for all product variations (Optional)</small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="price" class="form-label fw-bold">Price (₹) *</label>
                                         <input type="number" class="form-control" id="price" name="price" 
-                                               step="0.01" min="0" value="{{ product.price }}" required>
+                                               step="0.01" min="0" value="{{ product.price }}" placeholder="e.g., 99.99" required>
                                     </div>
                                     
-                                    <div class="col-md-6 mb-3">
-                                        <label for="stock" class="form-label">Stock Quantity *</label>
-                                        <input type="number" class="form-control" id="stock" name="stock" 
-                                               min="0" value="{{ product.stock }}" required>
+                                    <div class="col-md-6">
+                                        <label for="original_price" class="form-label fw-bold">Original Price (₹)</label>
+                                        <input type="number" class="form-control" id="original_price" name="original_price" 
+                                               step="0.01" min="0" value="{{ product.original_price or '' }}" placeholder="Optional: For discount pricing">
+                                        <small class="text-muted">Set if product is on discount (Optional)</small>
                                     </div>
                                 </div>
                                 
-                                <div class="mb-3">
-                                    <label class="form-label">Current Image</label>
-                                    <div class="mb-2">
-                                        <img src="{{ product.image_url }}" alt="{{ product.name }}" 
-                                             class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="stock" class="form-label fw-bold">Stock Quantity *</label>
+                                        <input type="number" class="form-control" id="stock" name="stock" 
+                                               min="0" value="{{ product.stock }}" placeholder="e.g., 100" required>
+                                    </div>
+                                
+                                    <div class="col-md-6">
+                                        <label for="sales_count" class="form-label fw-bold">Sales Count (past month)</label>
+                                        <input type="number" class="form-control" id="sales_count" name="sales_count" 
+                                               min="0" value="{{ product.sales_count or 0 }}" placeholder="e.g., 200 for '200+ bought'">
+                                        <small class="text-muted">e.g., 200 for '200+ bought' (Optional)</small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="ratings" class="form-label fw-bold">Ratings (1.0 - 5.0)</label>
+                                        <input type="number" class="form-control" id="ratings" name="ratings" 
+                                               step="0.1" min="0.0" max="5.0" value="{{ product.ratings or 0.0 }}" placeholder="e.g., 4.5">
+                                        <small class="text-muted">Average customer rating (Optional)</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="num_ratings" class="form-label fw-bold">Number of Ratings</label>
+                                        <input type="number" class="form-control" id="num_ratings" name="num_ratings" 
+                                               min="0" value="{{ product.num_ratings or 0 }}" placeholder="e.g., 150">
+                                        <small class="text-muted">Total number of customer ratings (Optional)</small>
                                     </div>
                                 </div>
                                 
                                 <div class="mb-4">
-                                    <label for="image" class="form-label">Update Product Image</label>
-                                    <input type="file" class="form-control" id="image" name="image" 
-                                           accept="image/*">
-                                    <small class="text-muted">Upload a new image to replace the current one (Optional)</small>
+                                    <label class="form-label fw-bold">Current Image</label>
+                                    <div class="mb-3">
+                                        <img src="{{ product.image_url or 'https://via.placeholder.com/150x150?text=No+Image' }}" alt="{{ product.name }}" 
+                                             class="img-thumbnail rounded" style="width: 150px; height: 150px; object-fit: cover;">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="images" class="form-label fw-bold">Update Product Image</label>
+                                    <input type="file" class="form-control" id="images" name="images" 
+                                           accept="image/*" multiple>
+                                    <small class="text-muted">Upload new images to replace existing ones (Optional)</small>
                                 </div>
                                 
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-secondary">Cancel</a>
-                                    <button type="submit" class="btn btn-primary">
+                                    <a href="{{ url_for('main.super_admin_products') }}" class="btn btn-lg btn-outline-secondary rounded-pill">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-lg btn-primary rounded-pill shadow-sm">
                                         <i class="fas fa-save me-2"></i>Update Product
                                     </button>
                                 </div>

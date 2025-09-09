@@ -5,65 +5,247 @@
 {% block content %}
 <!-- Custom Image Slider Section -->
 {% if slider_images %}
-<section class="container mt-4">
+<section class="mt-4">
     <div class="custom-slider-container">
         <div class="custom-slider-track">
             {% for image in slider_images %}
             <div class="custom-slider-item">
                 <img src="{{ image }}" alt="Slide Image">
-            </div>
-            {% endfor %}
-        </div>
-        <div class="slider-controls">
-            <button class="btn btn-secondary slider-btn-left" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
-            <button class="btn btn-secondary slider-btn-right" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- Categories Section -->
-{% if categories %}
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Shop by Category</h2>
-        <div class="row">
-            {% for category in categories %}
-            <div class="col-md-4 col-lg-3 mb-4">
-                <div class="card h-100 border-0 shadow-sm category-card">
-                    <h5 class="card-title text-center p-2" style="color: #000; background-color: #fff;">{{ category.name }}</h5>
-                    <div class="card-body category-image-content d-flex flex-column justify-content-center align-items-center position-relative"
-                         {% if category.icon_url %}style="background-image: url('{{ category.icon_url }}');"{% endif %}>
-                        <p class="card-text position-relative">{{ category.description or 'Explore products in this category' }}</p>
-                        <a href="{{ url_for('main.products', category=category.id) }}" class="btn btn-light btn-sm mt-auto position-relative">View Products</a>
-                    </div>
+                <div class="slider-overlay-content">
+                    {% if loop.index == 1 %}
+                    <h3 class="slider-title">FRESH GROCERIES</h3>
+                    <p class="slider-description">AT BEST PRICES</p>
+                    <a href="{{ url_for('main.products') }}" class="btn mt-3">SHOP NOW</a>
+                    {% elif loop.index == 2 %}
+                    <h3 class="slider-title">UPGRADE YOUR HOME</h3>
+                    <p class="slider-description">BEST DEALS ON APPLIANCES</p>
+                    <a href="{{ url_for('main.products') }}" class="btn mt-3">Shop Now <i class="bi bi-arrow-right"></i></a>
+                    {% elif loop.index == 3 %}
+                    <h3 class="slider-title">Glow Everyday</h3>
+                    <p class="slider-description">UPTO 30% OFF on Beauty Products</p>
+                    <a href="{{ url_for('main.products') }}" class="btn mt-3">Shop Beauty <i class="bi bi-arrow-right"></i></a>
+                    {% else %}
+                    <h3 class="slider-title">Shop Amazing Deals</h3>
+                    <p class="slider-description">Find your next favorite item</p>
+                    <a href="{{ url_for('main.products') }}" class="btn mt-3">SHOP NOW</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
         </div>
+        <div class="slider-controls">
+            <button class="btn btn-secondary slider-btn-left" id="prevSlide"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn btn-secondary slider-btn-right" id="nextSlide"><i class="bi bi-chevron-right"></i></button>
+        </div>
     </div>
 </section>
 {% endif %}
 
-<!-- Featured Products -->
+<!-- Hero Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <!-- Main Hero Content -->
+    <div class="row align-items-center mb-5">
+      <div class="col-lg-6">
+        <h1 class="display-6 fw-bold mb-3">Premium Products, <span class="text-primary">Delivered Fast</span></h1>
+        <p class="lead text-muted mb-4">Discover thousands of quality products with guaranteed authenticity, fast delivery, and exceptional support.</p>
+        <div class="d-flex flex-column flex-sm-row gap-3">
+          <a href="{{ url_for('main.products') }}" class="btn btn-primary btn-lg"><i class="bi bi-bag me-2"></i>Shop Now</a>
+          <a href="#categories" class="btn btn-outline-secondary btn-lg">Browse Categories</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row text-center g-3">
+          <div class="col-4">
+            <i class="bi bi-truck fs-3 text-primary"></i>
+            <div class="small fw-semibold">Fast Delivery</div>
+            <div class="text-muted small">2-day shipping</div>
+          </div>
+          <div class="col-4">
+            <i class="bi bi-shield-check fs-3 text-primary"></i>
+            <div class="small fw-semibold">Secure Payment</div>
+            <div class="text-muted small">SSL protected</div>
+          </div>
+          <div class="col-4">
+            <i class="bi bi-headset fs-3 text-primary"></i>
+            <div class="small fw-semibold">24/7 Support</div>
+            <div class="text-muted small">Always here</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Categories Section -->
+{% if categories %}
+<section id="categories" class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold display-6">Shop by Category</h2>
+          <p class="text-muted fs-5">Explore a wide range of categories to find exactly what you need.</p>
+        </div>
+
+        <!-- First Row - 5 Categories -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-4 mb-4">
+            {% for category in categories[:5] %}
+            <div class="col">
+                <div class="category-card-wrapper">
+                    <a href="{{ url_for('main.products', category=category.id) }}" class="d-block text-decoration-none">
+                        <div class="category-card position-relative overflow-hidden rounded-4 shadow-sm"
+                             style="background-image: url('{{ category.image_url }}'); background-size: cover; background-position: center; height: 280px;">
+                            <div class="category-overlay position-absolute inset-0 d-flex flex-column justify-content-center p-4">
+                                <div class="text-center">
+                                    <h3 class="fw-bold text-white mb-2 fs-4">{{ category.name }}</h3>
+                                    <p class="text-white-75 mb-0 small">
+                                        {% if category.name == 'Electronics' %}
+                                            Latest gadgets and technology
+                                        {% elif category.name == 'Books' %}
+                                            Knowledge and entertainment
+                                        {% elif category.name == 'Clothing' %}
+                                            Fashion and style essentials
+                                        {% elif category.name == 'Home & Kitchen' %}
+                                            Home essentials and appliances
+                                        {% elif category.name == 'Beauty & Personal Care' %}
+                                            Beauty and wellness products
+                                        {% elif category.name == 'Sports & Outdoors' %}
+                                            Fitness and outdoor gear
+                                        {% elif category.name == 'Automotive' %}
+                                            Car accessories and parts
+                                        {% elif category.name == 'Baby Products' %}
+                                            Everything for your little ones
+                                        {% elif category.name == 'Collectibles & Fine Art' %}
+                                            Unique and valuable items
+                                        {% elif category.name == 'Garden & Outdoor' %}
+                                            Gardening and outdoor living
+                                        {% elif category.name == 'Health & Household' %}
+                                            Health and household essentials
+                                        {% elif category.name == 'Industrial & Scientific' %}
+                                            Professional and scientific tools
+                                        {% elif category.name == 'Movies & TV' %}
+                                            Entertainment and media
+                                        {% elif category.name == 'Music' %}
+                                            Musical instruments and accessories
+                                        {% elif category.name == 'Office Products' %}
+                                            Office supplies and equipment
+                                        {% elif category.name == 'Pet Supplies' %}
+                                            Everything for your pets
+                                        {% elif category.name == 'Toys & Games' %}
+                                            Fun and entertainment
+                                        {% elif category.name == 'Video Games' %}
+                                            Gaming and entertainment
+                                        {% else %}
+                                            {{ category.description or 'Explore products in this category' }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Second Row - Remaining 3 Categories -->
+        {% if categories|length > 5 %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for category in categories[5:8] %}
+            <div class="col">
+                <div class="category-card-wrapper">
+                    <a href="{{ url_for('main.products', category=category.id) }}" class="d-block text-decoration-none">
+                        <div class="category-card position-relative overflow-hidden rounded-4 shadow-sm"
+                             style="background-image: url('{{ category.image_url }}'); background-size: cover; background-position: center; height: 280px;">
+                            <div class="category-overlay position-absolute inset-0 d-flex flex-column justify-content-center p-4">
+                                <div class="text-center">
+                                    <h3 class="fw-bold text-white mb-2 fs-4">{{ category.name }}</h3>
+                                    <p class="text-white-75 mb-0 small">
+                                        {% if category.name == 'Electronics' %}
+                                            Latest gadgets and technology
+                                        {% elif category.name == 'Books' %}
+                                            Knowledge and entertainment
+                                        {% elif category.name == 'Clothing' %}
+                                            Fashion and style essentials
+                                        {% elif category.name == 'Home & Kitchen' %}
+                                            Home essentials and appliances
+                                        {% elif category.name == 'Beauty & Personal Care' %}
+                                            Beauty and wellness products
+                                        {% elif category.name == 'Sports & Outdoors' %}
+                                            Fitness and outdoor gear
+                                        {% elif category.name == 'Automotive' %}
+                                            Car accessories and parts
+                                        {% elif category.name == 'Baby Products' %}
+                                            Everything for your little ones
+                                        {% elif category.name == 'Collectibles & Fine Art' %}
+                                            Unique and valuable items
+                                        {% elif category.name == 'Garden & Outdoor' %}
+                                            Gardening and outdoor living
+                                        {% elif category.name == 'Health & Household' %}
+                                            Health and household essentials
+                                        {% elif category.name == 'Industrial & Scientific' %}
+                                            Professional and scientific tools
+                                        {% elif category.name == 'Movies & TV' %}
+                                            Entertainment and media
+                                        {% elif category.name == 'Music' %}
+                                            Musical instruments and accessories
+                                        {% elif category.name == 'Office Products' %}
+                                            Office supplies and equipment
+                                        {% elif category.name == 'Pet Supplies' %}
+                                            Everything for your pets
+                                        {% elif category.name == 'Toys & Games' %}
+                                            Fun and entertainment
+                                        {% elif category.name == 'Video Games' %}
+                                            Gaming and entertainment
+                                        {% else %}
+                                            {{ category.description or 'Explore products in this category' }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Products Section -->
 {% if featured_products %}
-<section class="bg-white py-5">
+<section class="py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-5">Featured Products</h2>
-        <div class="row">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
             {% for product in featured_products %}
-            <div class="col-md-6 col-lg-3 mb-4">
-                <div class="card h-100 border-0 shadow-sm product-card">
-                    <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+            <div class="col">
+                <div class="card product-card h-100 shadow-sm border-0">
+                    <a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="d-block text-decoration-none">
+                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: contain; padding: 10px;">
+                    </a>
                     <div class="card-body d-flex flex-column">
-                        <h6 class="card-title">{{ product.name }}</h6>
-                        <p class="card-text text-muted flex-grow-1">{{ product.description[:100] }}{% if product.description|length > 100 %}...{% endif %}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 text-primary mb-0">${{ "%.2f"|format(product.price) }}</span>
-                            <small class="text-muted">{{ product.stock }} in stock</small>
+                        <h5 class="card-title text-truncate"><a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="text-decoration-none">{{ product.name }}</a></h5>
+                        <div class="d-flex align-items-center mb-2">
+                            {% set stars = (product.ratings or 0)|float %}
+                            <div class="text-warning me-1">
+                                {% for i in range(5) %}
+                                    {% if stars >= i+1 %}
+                                        <i class="fas fa-star"></i>
+                                    {% elif stars > i and stars < i+1 %}
+                                        <i class="fas fa-star-half-alt"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <small class="text-secondary">({{ product.num_ratings or 0 }})</small>
                         </div>
-                        <div class="mt-3">
-                            <a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="btn btn-primary btn-sm">View Details</a>
+                        <p class="card-text lead fw-bold text-dark mt-auto">₹{{ "%.2f"|format(product.price) }}</p>
+                        <div class="d-grid gap-2 mt-2">
+                            <a href="{{ url_for('main.add_to_cart', product_id=product.id) }}" class="btn btn-dark btn-sm"><i class="fas fa-shopping-cart me-2"></i>Add to Cart</a>
                         </div>
                     </div>
                 </div>
@@ -71,34 +253,34 @@
             {% endfor %}
         </div>
         <div class="text-center mt-4">
-            <a href="{{ url_for('main.products') }}" class="btn btn-outline-primary btn-lg">View All Products</a>
+            <a href="{{ url_for('main.products') }}" class="btn btn-outline-primary btn-lg">View All Products <i class="bi bi-arrow-right"></i></a>
         </div>
     </div>
 </section>
 {% endif %}
 
 <!-- Features Section -->
-<section class="py-5 bg-light">
+<section class="py-5 bg-white">
     <div class="container">
         <h2 class="text-center mb-5">Why Choose MSR Shop?</h2>
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="text-center">
-                    <i class="fas fa-shipping-fast fa-3x text-primary mb-3"></i>
+                    <i class="bi bi-truck fa-3x text-primary mb-3"></i>
                     <h5>Fast Delivery</h5>
                     <p class="text-muted">Get your orders delivered quickly with our reliable shipping partners.</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="text-center">
-                    <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                    <i class="bi bi-shield-check fa-3x text-primary"></i>
                     <h5>Secure Payment</h5>
                     <p class="text-muted">Shop with confidence using our secure payment system.</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="text-center">
-                    <i class="fas fa-headset fa-3x text-primary mb-3"></i>
+                    <i class="bi bi-headset fa-3x text-primary mb-3"></i>
                     <h5>24/7 Support</h5>
                     <p class="text-muted">Our customer support team is always here to help you.</p>
                 </div>
@@ -106,4 +288,359 @@
         </div>
     </div>
 </section>
+
+<style>
+/* Define CSS Variables */
+:root {
+    --white-color: #ffffff;
+    --dark-color: #343a40; /* Example dark color */
+}
+
+/* Custom Slider Styles */
+.custom-slider-container {
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 10px; /* Apply rounded corners to the container */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Add a subtle shadow */
+    height: 450px; /* Fixed height for the entire slider container */
+}
+
+.custom-slider-track {
+    display: flex;
+    height: 100%; /* Track takes full height of container */
+    transition: transform 0.3s ease-in-out;
+}
+
+.custom-slider-item {
+    min-width: calc(100% / 3); /* Show 3 items at a time */
+    box-sizing: border-box;
+    padding: 10px; /* Space between images */
+    text-align: center;
+    position: relative;
+    height: 100%; /* Item takes full height of track */
+}
+
+.custom-slider-item img {
+    width: 100%;
+    height: 100%; /* Image fills its item height */
+    object-fit: cover; /* Cover the area, may crop */
+    border-radius: 8px; /* Apply rounded corners to the images */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, filter 0.3s ease-in-out, top 0.3s ease-in-out;
+}
+
+.custom-slider-item.center-popup img {
+    transform: scale(1.15); /* Slightly larger popup effect */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+    filter: brightness(1.05); /* Slightly brighter, less dimming */
+    z-index: 10;
+    position: relative;
+    top: -5px;
+}
+
+/* Styles for the new slider overlay content */
+.slider-overlay-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align content to the bottom */
+    align-items: flex-start; /* Align text and button to the left */
+    text-align: left; /* Align text to the left */
+    color: white;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 70%); /* Gradient overlay */
+    padding: 25px; /* Increased padding */
+    opacity: 1;
+}
+
+.slider-title {
+    font-size: 2.0rem; /* Smaller font size */
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8); /* Stronger text shadow */
+    background-color: transparent; /* Remove background dimming from title */
+    padding: 0; /* Remove padding from title */
+    border-radius: 0;
+}
+
+.slider-description {
+    font-size: 1.2rem; /* Smaller font size */
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8); /* Stronger text shadow */
+    background-color: transparent; /* Remove background dimming from description */
+    padding: 0;
+    border-radius: 0;
+}
+
+.slider-overlay-content .btn {
+    background-color: var(--white-color); /* White button background */
+    color: var(--dark-color); /* Dark text for button */
+    font-weight: 600;
+    border-radius: 50px; /* Pill shape */
+    padding: 0.8rem 1.8rem; /* Larger padding */
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between text and icon */
+}
+
+.slider-overlay-content .btn:hover {
+    background-color: var(--white-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Slider Controls */
+.slider-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px; /* Add some padding from the edges */
+    z-index: 5; /* Ensure controls are above images */
+}
+
+.slider-controls button {
+    background-color: rgba(90, 92, 105, 0.8); /* Dark grey with transparency */
+    border: none;
+    color: white;
+    width: 45px; /* Larger touch target */
+    height: 45px;
+    border-radius: 8px; /* Rounded square */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.slider-controls button:hover {
+    background-color: rgba(90, 92, 105, 1); /* Solid dark grey on hover */
+}
+
+.slider-controls button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(90, 92, 105, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .custom-slider-container {
+        height: 400px; /* Adjusted height */
+    }
+    .custom-slider-item {
+        min-width: calc(100% / 2); /* Show 2 items */
+    }
+    .slider-controls button {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-slider-container {
+        height: 300px; /* Adjusted height for mobile */
+    }
+    .custom-slider-item {
+        min-width: 100%; /* Show 1 item */
+    }
+    .slider-controls button {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    .slider-overlay-content {
+        padding: 15px;
+        padding-bottom: 20px;
+    }
+}
+
+/* Responsive adjustments for slider content */
+@media (max-width: 992px) {
+    .slider-title {
+        font-size: 1.5rem;
+    }
+    .slider-description {
+        font-size: 0.9rem;
+    }
+    .slider-overlay-content {
+        padding: 20px;
+        padding-bottom: 25px;
+    }
+    .slider-overlay-content .btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .slider-title {
+        font-size: 1.2rem;
+    }
+    .slider-description {
+        font-size: 0.7rem;
+        margin-bottom: 10px;
+    }
+    .slider-overlay-content {
+        padding: 15px;
+        padding-bottom: 20px;
+    }
+    .slider-overlay-content .btn {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Ensure titles and descriptions are visible */
+.slider-title, .slider-description {
+    display: block !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sliderContainer = document.querySelector('.custom-slider-container');
+    const sliderTrack = document.querySelector('.custom-slider-track');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    let sliderItems = Array.from(document.querySelectorAll('.custom-slider-item'));
+    
+    if (!sliderTrack || !prevBtn || !nextBtn || sliderItems.length === 0) {
+        return; // Exit if elements not found
+    }
+
+    const originalTotalSlides = sliderItems.length;
+    const visibleSlides = getVisibleSlidesCount(); // Determine how many slides are visible based on screen size
+
+    // Clone slides for infinite loop effect
+    for (let i = 0; i < visibleSlides; i++) {
+        sliderTrack.appendChild(sliderItems[i].cloneNode(true));
+        sliderTrack.prepend(sliderItems[originalTotalSlides - 1 - i].cloneNode(true));
+    }
+    sliderItems = Array.from(document.querySelectorAll('.custom-slider-item')); // Update sliderItems with cloned nodes
+
+    let currentSlide = visibleSlides; // Start at the first original slide
+    let isAnimating = false;
+
+    // Function to get the number of visible slides based on media queries
+    function getVisibleSlidesCount() {
+        if (window.matchMedia('(max-width: 768px)').matches) {
+            return 1;
+        } else if (window.matchMedia('(max-width: 992px)').matches) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
+
+    // Initial positioning
+    function setInitialPosition() {
+        sliderTrack.style.transition = 'none';
+        sliderTrack.style.transform = `translateX(${-currentSlide * (100 / visibleSlides)}%)`;
+        setTimeout(() => {
+            sliderTrack.style.transition = 'transform 0.3s ease-in-out';
+        }, 50);
+    }
+
+    function updateSlider() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        // Remove center-popup from all items first
+        sliderItems.forEach(item => item.classList.remove('center-popup'));
+        
+        const translateX = -currentSlide * (100 / visibleSlides);
+        sliderTrack.style.transform = `translateX(${translateX}%)`;
+
+        sliderTrack.addEventListener('transitionend', handleTransitionEnd, { once: true });
+        
+        // Add center-popup to the appropriate item after the transition starts
+        // The actual central item index depends on visibleSlides
+        let centerIndex = currentSlide;
+        if (visibleSlides === 3) {
+            centerIndex = currentSlide + 1; // For 3 visible, the middle one is index 1 (0-indexed)
+        } else if (visibleSlides === 2) {
+            // For 2 visible slides, it's harder to define a single 'center'.
+            // We'll apply it to the first of the two visible items as a compromise.
+            centerIndex = currentSlide;
+        } else if (visibleSlides === 1) {
+            centerIndex = currentSlide;
+        }
+
+        // Ensure the index is within bounds
+        if (sliderItems[centerIndex]) {
+            sliderItems[centerIndex].classList.add('center-popup');
+        }
+
+    }
+
+    function handleTransitionEnd() {
+        if (currentSlide === sliderItems.length - visibleSlides) {
+            currentSlide = originalTotalSlides;
+            setInitialPosition();
+        } else if (currentSlide === 0) {
+            currentSlide = originalTotalSlides;
+            setInitialPosition();
+        }
+        isAnimating = false;
+        // Re-apply center-popup after potential jump
+        // Remove from all first
+        sliderItems.forEach(item => item.classList.remove('center-popup'));
+        
+        let centerIndex = currentSlide;
+        if (visibleSlides === 3) {
+            centerIndex = currentSlide + 1; // For 3 visible, the middle one is index 1 (0-indexed)
+        } else if (visibleSlides === 2) {
+            centerIndex = currentSlide;
+        } else if (visibleSlides === 1) {
+            centerIndex = currentSlide;
+        }
+        if (sliderItems[centerIndex]) {
+            sliderItems[centerIndex].classList.add('center-popup');
+        }
+    }
+    
+    function nextSlide() {
+        if (isAnimating) return;
+        currentSlide++;
+        updateSlider();
+    }
+    
+    function prevSlide() {
+        if (isAnimating) return;
+        currentSlide--;
+        updateSlider();
+    }
+    
+    // Event listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    
+    // Auto-slide functionality
+    setInterval(nextSlide, 2000);
+    
+    // Initialize slider
+    setInitialPosition();
+    // Apply initial center-popup class
+    let centerIndex = currentSlide;
+    if (visibleSlides === 3) {
+        centerIndex = currentSlide + 1;
+    } else if (visibleSlides === 2) {
+        centerIndex = currentSlide;
+    } else if (visibleSlides === 1) {
+        centerIndex = currentSlide;
+    }
+    if (sliderItems[centerIndex]) {
+        sliderItems[centerIndex].classList.add('center-popup');
+    }
+});
+</script>
 {% endblock %}
